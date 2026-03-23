@@ -1,0 +1,1344 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>AI技術動向 × 開発知見 — Preview</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Noto+Sans+JP:wght@400;700&display=swap');
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  background: #E0E0E0;
+  font-family: 'Noto Sans JP', sans-serif;
+  padding: 40px 0;
+  display: flex; flex-direction: column; align-items: center; gap: 32px;
+}
+
+.slide {
+  width: 960px; height: 540px;
+  background: #FFFFFF;
+  position: relative; overflow: hidden;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.15);
+  padding: 0;
+}
+.slide-dark { background: #1A1A1A; }
+
+/* ---- Title Slide ---- */
+.title-topbar { position: absolute; top: 0; left: 0; width: 100%; height: 14px; background: #000000; }
+.title-body { padding: 96px 77px 0; }
+.title-eyebrow {
+  font-family: 'Noto Sans JP', sans-serif; font-size: 25px; font-weight: 700;
+  color: #4A4A4A; letter-spacing: 2px; margin-bottom: 4px;
+}
+.title-main {
+  font-family: 'Montserrat', sans-serif; font-size: 52px; font-weight: 700;
+  color: #000000; line-height: 1.2;
+}
+.title-subtitle {
+  display: flex; align-items: center; gap: 12px;
+  margin-top: 16px; font-size: 27px; color: #333333;
+}
+.title-subtitle-bar { display: inline-block; width: 5px; height: 36px; background: #000000; flex-shrink: 0; }
+.title-divider {
+  position: absolute; bottom: 80px; left: 77px; right: 77px;
+  height: 3px; background: #000000;
+}
+.title-footer { position: absolute; bottom: 24px; left: 77px; }
+.title-speaker { font-size: 21px; font-weight: 700; color: #000000; }
+.title-credentials { font-size: 15px; color: #4A4A4A; margin-top: 2px; }
+
+/* ---- Section Slide ---- */
+.section-letter {
+  position: absolute; left: 19px; top: -29px;
+  font-family: 'Montserrat', sans-serif; font-size: 269px; font-weight: 700;
+  color: #333333; line-height: 1; user-select: none;
+}
+.section-vline {
+  position: absolute; left: 432px; top: 77px;
+  width: 5px; height: 384px; background: #FFFFFF;
+}
+.section-right { position: absolute; left: 480px; top: 77px; width: 432px; }
+.section-label {
+  font-family: 'Montserrat', sans-serif; font-size: 23px; font-weight: 700;
+  color: #888888; letter-spacing: 4px; margin-bottom: 12px;
+}
+.section-title {
+  font-family: 'Noto Sans JP', sans-serif; font-size: 38px; font-weight: 700;
+  color: #FFFFFF; line-height: 1.35; margin-bottom: 24px;
+}
+.section-topics { display: flex; flex-direction: column; gap: 8px; }
+.section-topic { font-size: 19px; color: #FFFFFF; }
+
+/* ---- Content Slide ---- */
+.content-header {
+  display: flex; justify-content: space-between; align-items: baseline;
+  padding: 38px 77px 0;
+}
+.content-page-title {
+  font-family: 'Montserrat', 'Noto Sans JP', sans-serif; font-size: 23px; font-weight: 700;
+  color: #000000; letter-spacing: 2px;
+}
+.content-page-num {
+  font-family: 'Montserrat', sans-serif; font-size: 19px; font-weight: 700;
+  color: #888888;
+}
+.content-header-line {
+  margin: 8px 77px 0; height: 3px; background: #000000;
+}
+.content-label {
+  display: inline-block; margin: 12px 0 0 77px;
+  background: #000000; color: #FFFFFF;
+  font-size: 13px; font-weight: 700; padding: 4px 14px;
+  font-family: 'Noto Sans JP', sans-serif;
+}
+.content-key-message {
+  padding: 6px 77px 0;
+  font-size: 27px; font-weight: 700; color: #000000;
+  line-height: 1.4;
+}
+.content-list { margin: 12px 77px 0; }
+.content-list-border-top { height: 1.5px; background: #000000; }
+.content-list-border-bottom { height: 1.5px; background: #000000; }
+
+.content-item {
+  display: flex; align-items: flex-start; padding: 8px 0;
+}
+.content-item-num {
+  font-family: 'Montserrat', sans-serif; font-size: 29px; font-weight: 700;
+  color: #000000; width: 58px; flex-shrink: 0; padding-top: 2px;
+}
+.content-item-body { flex: 1; }
+.content-item-title {
+  font-size: 19px; font-weight: 700; color: #000000; line-height: 1.3;
+}
+.content-item-desc {
+  font-size: 14px; color: #4A4A4A; margin-top: 2px;
+}
+.content-item-sep {
+  height: 0.75px; background: #CCCCCC;
+}
+
+/* ---- Impact Slide ---- */
+.impact-message {
+  position: absolute; top: 50%; left: 77px; right: 77px;
+  transform: translateY(-50%);
+  font-size: 38px; font-weight: 700; color: #000000;
+  text-align: center; line-height: 1.45;
+}
+.impact-sub {
+  position: absolute; bottom: 50px; left: 77px; right: 77px;
+  font-size: 17px; color: #4A4A4A; text-align: center;
+}
+/* impact with header — adjust message position */
+.slide:has(.content-header-line) .impact-message { top: 55%; }
+
+/* ---- Two-Col ---- */
+.twocol-container {
+  display: flex; gap: 24px; margin: 12px 77px 0;
+}
+.twocol-col { flex: 1; }
+.twocol-col-border { height: 4px; background: #000000; margin-bottom: 10px; }
+.twocol-col-title {
+  font-family: 'Montserrat', 'Noto Sans JP', sans-serif;
+  font-size: 17px; font-weight: 700; color: #000000; margin-bottom: 10px;
+}
+.twocol-item { font-size: 15px; color: #4A4A4A; margin-bottom: 6px; }
+
+/* ---- Slide number overlay ---- */
+.slide-index {
+  position: absolute; bottom: 8px; right: 16px;
+  font-family: 'Montserrat', sans-serif; font-size: 11px; color: #CCCCCC;
+}
+</style>
+</head>
+<body>
+<div class="slide">
+  <div class="title-topbar"></div>
+  <div class="title-body">
+    <div class="title-eyebrow">社内勉強会 2026.03</div>
+    <div class="title-main">AI技術動向 × 開発知見</div>
+    <div class="title-subtitle"><span class="title-subtitle-bar"></span>ツールの使い方を覚えるその先へ</div>
+  </div>
+  <div class="title-divider"></div>
+  <div class="title-footer">
+    
+    
+  </div>
+<div class="slide-index">1 / 44</div></div>
+
+<div class="slide">
+  <div class="content-header">
+    <div class="content-page-title">エグゼクティブサマリー</div>
+    
+  </div>
+  <div class="content-header-line"></div>
+  <div class="content-label">SUMMARY</div>
+  <div class="content-key-message">AIは「使う」から「任せる」に進化した。任せるには壊さない仕組みが要る。どういう仕組みが必要かを構想し、出来上がったものの良し悪しを判断できるかどうかで、AIを活かせるかが決まる</div>
+  <div class="content-list">
+    <div class="content-list-border-top"></div>
+    <div class="content-item">
+      <div class="content-item-num">01</div>
+      <div class="content-item-body">
+        <div class="content-item-title">世の中はもう「AIに委任する」フェーズ</div>
+        <div class="content-item-desc">Dify / Copilot Studio / n8n — GUI不要、AIが直接構築する時代</div>
+      </div>
+    </div><div class="content-item-sep"></div>
+<div class="content-item">
+      <div class="content-item-num">02</div>
+      <div class="content-item-body">
+        <div class="content-item-title">任せるほど壊れる。だから仕組みが先</div>
+        <div class="content-item-desc">ルール・パターン・ガードの3本柱で「適当にやっといて」を成立させる</div>
+      </div>
+    </div><div class="content-item-sep"></div>
+<div class="content-item">
+      <div class="content-item-num">03</div>
+      <div class="content-item-body">
+        <div class="content-item-title">メタファーとペルソナで認知負荷を圧縮</div>
+        <div class="content-item-desc">30機能超を1人で回すために、世界観と人格を統一する</div>
+      </div>
+    </div><div class="content-item-sep"></div>
+<div class="content-item">
+      <div class="content-item-num">04</div>
+      <div class="content-item-body">
+        <div class="content-item-title">陳腐化するものとしないものを見極める</div>
+        <div class="content-item-desc">AIの能力不足を補う工夫は消える。人間の認知に関わる仕組みは残る</div>
+      </div>
+    </div>
+    <div class="content-list-border-bottom"></div>
+  </div>
+<div class="slide-index">2 / 44</div></div>
+
+<div class="slide">
+  <div class="content-header">
+    <div class="content-page-title">目次</div>
+    
+  </div>
+  <div class="content-header-line"></div>
+  <div class="content-label">CONTENTS</div>
+  
+  <div class="content-list">
+    <div class="content-list-border-top"></div>
+    <div class="content-item">
+      <div class="content-item-num">01</div>
+      <div class="content-item-body">
+        <div class="content-item-title">第1章: AIエージェントの現在地</div>
+        <div class="content-item-desc">「使う」→「自動化する」→「任せる」の3段階と事例</div>
+      </div>
+    </div><div class="content-item-sep"></div>
+<div class="content-item">
+      <div class="content-item-num">02</div>
+      <div class="content-item-body">
+        <div class="content-item-title">第2章: 「適当にやっといて」を通すための仕組み</div>
+        <div class="content-item-desc">壊れない保証を先に作る。ルール・パターン・ガード</div>
+      </div>
+    </div><div class="content-item-sep"></div>
+<div class="content-item">
+      <div class="content-item-num">03</div>
+      <div class="content-item-body">
+        <div class="content-item-title">第3章: メタファーで認知負荷を圧縮する</div>
+        <div class="content-item-desc">航空メタファーの実例と受益者</div>
+      </div>
+    </div><div class="content-item-sep"></div>
+<div class="content-item">
+      <div class="content-item-num">04</div>
+      <div class="content-item-body">
+        <div class="content-item-title">第4章: AIにペルソナを与える</div>
+        <div class="content-item-desc">毎回同じ人格で起動する仕組みと記憶管理</div>
+      </div>
+    </div><div class="content-item-sep"></div>
+<div class="content-item">
+      <div class="content-item-num">05</div>
+      <div class="content-item-body">
+        <div class="content-item-title">第5章: 陳腐化するものと、しないもの</div>
+        <div class="content-item-desc">投資判断の基準</div>
+      </div>
+    </div><div class="content-item-sep"></div>
+<div class="content-item">
+      <div class="content-item-num">06</div>
+      <div class="content-item-body">
+        <div class="content-item-title">第6章: まとめ</div>
+        <div class="content-item-desc">ツールは変わる。仕組みの設計力は残る</div>
+      </div>
+    </div>
+    <div class="content-list-border-bottom"></div>
+  </div>
+<div class="slide-index">3 / 44</div></div>
+
+<div class="slide slide-dark">
+  <div class="section-letter">1</div>
+  <div class="section-vline"></div>
+  <div class="section-right">
+    <div class="section-label">CHAPTER 01</div>
+    <div class="section-title">AIエージェントの<br>現在地</div>
+    <div class="section-topics"><div class="section-topic">■ AI活用の3段階</div>
+<div class="section-topic">■ エージェント型とは</div>
+<div class="section-topic">■ Dify / Copilot Studio / n8n</div></div>
+  </div>
+<div class="slide-index">4 / 44</div></div>
+
+<div class="slide">
+  <div class="content-header">
+    <div class="content-page-title">「使う」→「自動化する」→「任せる」</div>
+    <div class="content-page-num">01</div>
+  </div>
+  <div class="content-header-line"></div>
+  <div class="content-label">3 STAGES</div>
+  <div class="content-key-message">社内は「自動化」あたり。世の中はもう「任せる」に入ってる</div>
+  <div class="content-list">
+    <div class="content-list-border-top"></div>
+    <div class="content-item">
+      <div class="content-item-num">01</div>
+      <div class="content-item-body">
+        <div class="content-item-title">聞く</div>
+        <div class="content-item-desc">ChatGPT（社内の大半）</div>
+      </div>
+    </div><div class="content-item-sep"></div>
+<div class="content-item">
+      <div class="content-item-num">02</div>
+      <div class="content-item-body">
+        <div class="content-item-title">自動化する</div>
+        <div class="content-item-desc">Dify / GPTs / Power Automate（社内の先進層）</div>
+      </div>
+    </div><div class="content-item-sep"></div>
+<div class="content-item">
+      <div class="content-item-num">03</div>
+      <div class="content-item-body">
+        <div class="content-item-title">委任する</div>
+        <div class="content-item-desc">Claude Code / Devin / OpenHands（世の中はここ）</div>
+      </div>
+    </div>
+    <div class="content-list-border-bottom"></div>
+  </div>
+<div class="slide-index">5 / 44</div></div>
+
+<div class="slide">
+  <div class="content-header">
+    <div class="content-page-title">AIが自分で判断して動く</div>
+    <div class="content-page-num">02</div>
+  </div>
+  <div class="content-header-line"></div>
+  <div class="content-label">AGENT</div>
+  <div class="content-key-message">指示→実行→結果報告のサイクルが人間の介在なしに回る</div>
+  <div class="content-list">
+    <div class="content-list-border-top"></div>
+    <div class="content-item">
+      <div class="content-item-num">01</div>
+      <div class="content-item-body">
+        <div class="content-item-title">ファイルを読む</div>
+        <div class="content-item-desc">コードベース・ドキュメントを自律的に探索</div>
+      </div>
+    </div><div class="content-item-sep"></div>
+<div class="content-item">
+      <div class="content-item-num">02</div>
+      <div class="content-item-body">
+        <div class="content-item-title">判断する</div>
+        <div class="content-item-desc">何をどう変更するか、AIが自分で決める</div>
+      </div>
+    </div><div class="content-item-sep"></div>
+<div class="content-item">
+      <div class="content-item-num">03</div>
+      <div class="content-item-body">
+        <div class="content-item-title">コードを書く</div>
+        <div class="content-item-desc">実装・テスト・ドキュメント更新まで一気通貫</div>
+      </div>
+    </div><div class="content-item-sep"></div>
+<div class="content-item">
+      <div class="content-item-num">04</div>
+      <div class="content-item-body">
+        <div class="content-item-title">結果報告</div>
+        <div class="content-item-desc">人間は最後に確認するだけ</div>
+      </div>
+    </div>
+    <div class="content-list-border-bottom"></div>
+  </div>
+<div class="slide-index">6 / 44</div></div>
+
+<div class="slide">
+  <div class="content-header">
+    <div class="content-page-title">Difyのワークフロー、もうGUIで作らなくていい</div>
+    <div class="content-page-num">03</div>
+  </div>
+  <div class="content-header-line"></div>
+  <div class="content-label">CASE 01</div>
+  <div class="content-key-message">ワークフローの実体はYAML。AIで直接生成・編集できる</div>
+  <div class="content-list">
+    <div class="content-list-border-top"></div>
+    <div class="content-item">
+      <div class="content-item-num">01</div>
+      <div class="content-item-body">
+        <div class="content-item-title">GUI画面でノードをドラッグ＆ドロップ</div>
+        <div class="content-item-desc">→ これが従来のやり方</div>
+      </div>
+    </div><div class="content-item-sep"></div>
+<div class="content-item">
+      <div class="content-item-num">02</div>
+      <div class="content-item-body">
+        <div class="content-item-title">実体はただのYAMLテキスト</div>
+        <div class="content-item-desc">→ Claude Codeに「こういうの作って」で生成</div>
+      </div>
+    </div><div class="content-item-sep"></div>
+<div class="content-item">
+      <div class="content-item-num">03</div>
+      <div class="content-item-body">
+        <div class="content-item-title">テンプレ蓄積で精度向上</div>
+        <div class="content-item-desc">→ ポン出しで作れないワークフローはほぼなくなる</div>
+      </div>
+    </div>
+    <div class="content-list-border-bottom"></div>
+  </div>
+<div class="slide-index">7 / 44</div></div>
+
+<div class="slide">
+  <div class="content-header">
+    <div class="content-page-title">Copilot Studio — VS Code拡張でGUI不要に</div>
+    <div class="content-page-num">04</div>
+  </div>
+  <div class="content-header-line"></div>
+  <div class="content-label">CASE 02</div>
+  <div class="content-key-message">Microsoftが公式にコードベース構築の導線を整備。社内で使えるツール</div>
+  <div class="content-list">
+    <div class="content-list-border-top"></div>
+    <div class="content-item">
+      <div class="content-item-num">01</div>
+      <div class="content-item-body">
+        <div class="content-item-title">VS Code拡張が公式リリース</div>
+        <div class="content-item-desc">GUIを経由せずコードベースで直接構築</div>
+      </div>
+    </div><div class="content-item-sep"></div>
+<div class="content-item">
+      <div class="content-item-num">02</div>
+      <div class="content-item-body">
+        <div class="content-item-title">コードベース = AIに書かせる導線</div>
+        <div class="content-item-desc">AIで自動生成する道が公式に開いた</div>
+      </div>
+    </div>
+    <div class="content-list-border-bottom"></div>
+  </div>
+<div class="slide-index">8 / 44</div></div>
+
+<div class="slide">
+  <div class="content-header">
+    <div class="content-page-title">n8n — JSON定義。コードで行ける</div>
+    <div class="content-page-num">05</div>
+  </div>
+  <div class="content-header-line"></div>
+  <div class="content-label">CASE 03</div>
+  <div class="content-key-message">Dify、Copilot Studio、n8n。ノーコード/ローコード全般でこの流れ</div>
+  <div class="content-list">
+    <div class="content-list-border-top"></div>
+    <div class="content-item">
+      <div class="content-item-num">01</div>
+      <div class="content-item-body">
+        <div class="content-item-title">n8nのワークフローもJSON</div>
+        <div class="content-item-desc">構造はDifyと全く同じ</div>
+      </div>
+    </div><div class="content-item-sep"></div>
+<div class="content-item">
+      <div class="content-item-num">02</div>
+      <div class="content-item-body">
+        <div class="content-item-title">3つ並べると見えてくる</div>
+        <div class="content-item-desc">特定のツールの話じゃない。全般的な流れ</div>
+      </div>
+    </div>
+    <div class="content-list-border-bottom"></div>
+  </div>
+<div class="slide-index">9 / 44</div></div>
+
+<div class="slide">
+  <div class="content-header">
+    <div class="content-page-title">人間に要るのは上流の判断だけ</div>
+    <div class="content-page-num">06</div>
+  </div>
+  <div class="content-header-line"></div>
+  <div class="content-label">INSIGHT</div>
+  <div class="content-key-message">「何ができるか」を理解する力 + 「どう構築するか」の設計力</div>
+  <div class="content-list">
+    <div class="content-list-border-top"></div>
+    <div class="content-item">
+      <div class="content-item-num">01</div>
+      <div class="content-item-body">
+        <div class="content-item-title">何を作るか・なぜ作るか</div>
+        <div class="content-item-desc">→ 人間の領域</div>
+      </div>
+    </div><div class="content-item-sep"></div>
+<div class="content-item">
+      <div class="content-item-num">02</div>
+      <div class="content-item-body">
+        <div class="content-item-title">どう構築するか</div>
+        <div class="content-item-desc">→ 設計力（人間 + AI）</div>
+      </div>
+    </div><div class="content-item-sep"></div>
+<div class="content-item">
+      <div class="content-item-num">03</div>
+      <div class="content-item-body">
+        <div class="content-item-title">実際に組む</div>
+        <div class="content-item-desc">→ AIの領域</div>
+      </div>
+    </div>
+    <div class="content-list-border-bottom"></div>
+  </div>
+<div class="slide-index">10 / 44</div></div>
+
+<div class="slide slide-dark">
+  <div class="section-letter">2</div>
+  <div class="section-vline"></div>
+  <div class="section-right">
+    <div class="section-label">CHAPTER 02</div>
+    <div class="section-title">AIに“適当にやっといて”<br>を通すための仕組み</div>
+    <div class="section-topics"><div class="section-topic">■ なぜ壊れるか</div>
+<div class="section-topic">■ ルール・パターン・ガード</div>
+<div class="section-topic">■ DeckPilotの実例</div></div>
+  </div>
+<div class="slide-index">11 / 44</div></div>
+
+<div class="slide">
+  <div class="content-header">
+    <div class="content-page-title">プロンプト、RAG、ファインチューニング</div>
+    <div class="content-page-num">07</div>
+  </div>
+  <div class="content-header-line"></div>
+  <div class="content-label">COMMON</div>
+  <div class="content-key-message">でも「毎回ブレずに動かす」にはそれだけじゃ足りない</div>
+  <div class="content-list">
+    <div class="content-list-border-top"></div>
+    <div class="content-item">
+      <div class="content-item-num">01</div>
+      <div class="content-item-body">
+        <div class="content-item-title">プロンプトエンジニアリング</div>
+        <div class="content-item-desc">△ 入力の工夫だけでは再現性に限界</div>
+      </div>
+    </div><div class="content-item-sep"></div>
+<div class="content-item">
+      <div class="content-item-num">02</div>
+      <div class="content-item-body">
+        <div class="content-item-title">RAG</div>
+        <div class="content-item-desc">△ 情報の補強だけでは行動の一貫性は担保できない</div>
+      </div>
+    </div><div class="content-item-sep"></div>
+<div class="content-item">
+      <div class="content-item-num">03</div>
+      <div class="content-item-body">
+        <div class="content-item-title">ファインチューニング</div>
+        <div class="content-item-desc">△ コストが高く、汎用性との両立が難しい</div>
+      </div>
+    </div>
+    <div class="content-list-border-bottom"></div>
+  </div>
+<div class="slide-index">12 / 44</div></div>
+
+<div class="slide">
+  <div class="content-header">
+    <div class="content-page-title">AIに任せると壊れる理由は2つある</div>
+    <div class="content-page-num">08</div>
+  </div>
+  <div class="content-header-line"></div>
+  <div class="content-label">CORE</div>
+  <div class="content-key-message">「毎回忘れる」と「足すほど壊れる」の掛け算</div>
+  <div class="content-list">
+    <div class="content-list-border-top"></div>
+    <div class="content-item">
+      <div class="content-item-num">01</div>
+      <div class="content-item-body">
+        <div class="content-item-title">AIは毎回記憶喪失で来る</div>
+        <div class="content-item-desc">前の会話を覚えてない。毎回ゼロから全体を把握し直す</div>
+      </div>
+    </div><div class="content-item-sep"></div>
+<div class="content-item">
+      <div class="content-item-num">02</div>
+      <div class="content-item-body">
+        <div class="content-item-title">機能が増えるほど壊れやすくなる</div>
+        <div class="content-item-desc">新しいものを足すと、前に作ったものが動かなくなる</div>
+      </div>
+    </div><div class="content-item-sep"></div>
+<div class="content-item">
+      <div class="content-item-num">03</div>
+      <div class="content-item-body">
+        <div class="content-item-title">記憶喪失 × 複雑性 = 毎回どこかを壊す</div>
+        <div class="content-item-desc">全体を知らないAIが複雑なシステムに手を入れる。壊さない方が奇跡</div>
+      </div>
+    </div>
+    <div class="content-list-border-bottom"></div>
+  </div>
+<div class="slide-index">13 / 44</div></div>
+
+<div class="slide">
+  <div class="content-header">
+    <div class="content-page-title">新しい機能を足すと、前のが壊れる</div>
+    <div class="content-page-num">09</div>
+  </div>
+  <div class="content-header-line"></div>
+  <div class="content-label">REALITY</div>
+  <div class="content-key-message">単機能なら平気。でも増やし続けるなら、壊さない仕組みが先に要る</div>
+  <div class="content-list">
+    <div class="content-list-border-top"></div>
+    <div class="content-item">
+      <div class="content-item-num">01</div>
+      <div class="content-item-body">
+        <div class="content-item-title">1個目は自由に作れる</div>
+        <div class="content-item-desc">他に影響するものがない。何をやっても壊れない</div>
+      </div>
+    </div><div class="content-item-sep"></div>
+<div class="content-item">
+      <div class="content-item-num">02</div>
+      <div class="content-item-body">
+        <div class="content-item-title">10個目から「足したら別の何かが壊れる」が起きる</div>
+        <div class="content-item-desc">設定の競合、画面の干渉、データの上書き。全体を見ないと既存機能が動かなくなる</div>
+      </div>
+    </div><div class="content-item-sep"></div>
+<div class="content-item">
+      <div class="content-item-num">03</div>
+      <div class="content-item-body">
+        <div class="content-item-title">30個超えると人間もAIも全体を把握できない</div>
+        <div class="content-item-desc">仕組みがないと、足すたびにどこかが壊れるループに入る</div>
+      </div>
+    </div>
+    <div class="content-list-border-bottom"></div>
+  </div>
+<div class="slide-index">14 / 44</div></div>
+
+<div class="slide">
+  <div class="content-header">
+    <div class="content-page-title">壊れたら終わり。だから壊れない仕組みが先</div>
+    <div class="content-page-num">10</div>
+  </div>
+  <div class="content-header-line"></div>
+  <div class="content-label">PRINCIPLE</div>
+  <div class="impact-message">「適当にやっといて」が通るのは<br>壊さない保証があるから</div>
+  <div class="impact-sub">自由に任せるほど、破綻を防ぐ仕組みの厚みが要る</div>
+<div class="slide-index">15 / 44</div></div>
+
+<div class="slide">
+  <div class="content-header">
+    <div class="content-page-title">ルール・パターン・ガード</div>
+    <div class="content-page-num">11</div>
+  </div>
+  <div class="content-header-line"></div>
+  <div class="content-label">3 PILLARS</div>
+  <div class="content-key-message">この3つが揃うと「適当にやっといて」が通る</div>
+  <div class="content-list">
+    <div class="content-list-border-top"></div>
+    <div class="content-item">
+      <div class="content-item-num">01</div>
+      <div class="content-item-body">
+        <div class="content-item-title">ルールの体系化</div>
+        <div class="content-item-desc">指示書を1箇所に集約。毎回読ませる → 記憶喪失を解決</div>
+      </div>
+    </div><div class="content-item-sep"></div>
+<div class="content-item">
+      <div class="content-item-num">02</div>
+      <div class="content-item-body">
+        <div class="content-item-title">パターンの固定</div>
+        <div class="content-item-desc">同じ作業は同じ手順。ブレをなくす → 再現性を確保</div>
+      </div>
+    </div><div class="content-item-sep"></div>
+<div class="content-item">
+      <div class="content-item-num">03</div>
+      <div class="content-item-body">
+        <div class="content-item-title">ガード</div>
+        <div class="content-item-desc">壊したら終わりの場所にだけ厚く敷く → 破綻を防止</div>
+      </div>
+    </div>
+    <div class="content-list-border-bottom"></div>
+  </div>
+<div class="slide-index">16 / 44</div></div>
+
+<div class="slide">
+  <div class="content-header">
+    <div class="content-page-title">これが「適当にやっといて」の結果</div>
+    <div class="content-page-num">12</div>
+  </div>
+  <div class="content-header-line"></div>
+  <div class="content-label">DEMO</div>
+  <div class="impact-message">デスクトップOS。30個超のアプリ。<br>全部会話だけで作った</div>
+  <div class="impact-sub">【ここにDeckPilotのデスクトップ画面スクショを挿入】</div>
+<div class="slide-index">17 / 44</div></div>
+
+<div class="slide">
+  <div class="content-header">
+    <div class="content-page-title">「時計作って」→ アイコンが増えるまで</div>
+    <div class="content-page-num">13</div>
+  </div>
+  <div class="content-header-line"></div>
+  <div class="content-label">FLOW</div>
+  <div class="content-key-message">会話1つで全部起きる。プロンプトもコードも1文字も書いていない</div>
+  <div class="content-list">
+    <div class="content-list-border-top"></div>
+    <div class="content-item">
+      <div class="content-item-num">01</div>
+      <div class="content-item-body">
+        <div class="content-item-title">「時計作って」と会話で言う</div>
+        
+      </div>
+    </div><div class="content-item-sep"></div>
+<div class="content-item">
+      <div class="content-item-num">02</div>
+      <div class="content-item-body">
+        <div class="content-item-title">RIOがコードを書く</div>
+        <div class="content-item-desc">AIペルソナが自律的に実装</div>
+      </div>
+    </div><div class="content-item-sep"></div>
+<div class="content-item">
+      <div class="content-item-num">03</div>
+      <div class="content-item-body">
+        <div class="content-item-title">ビルド → テスト → ドキュメント自動更新</div>
+        <div class="content-item-desc">パイプラインが自動で走る</div>
+      </div>
+    </div><div class="content-item-sep"></div>
+<div class="content-item">
+      <div class="content-item-num">04</div>
+      <div class="content-item-body">
+        <div class="content-item-title">デスクトップにClockのアイコンが増える</div>
+        <div class="content-item-desc">完了</div>
+      </div>
+    </div>
+    <div class="content-list-border-bottom"></div>
+  </div>
+<div class="slide-index">18 / 44</div></div>
+
+<div class="slide">
+  <div class="content-header">
+    <div class="content-page-title">23万行。1人。1ヶ月。コード0行</div>
+    <div class="content-page-num">14</div>
+  </div>
+  <div class="content-header-line"></div>
+  <div class="content-label">OUTPUT</div>
+  <div class="impact-message">「1人 × AI × 仕組み」で<br>出せるアウトプットの実例</div>
+  <div class="impact-sub">【ここにコード量カウンターのスクショを挿入】</div>
+<div class="slide-index">19 / 44</div></div>
+
+<div class="slide">
+  <div class="content-header">
+    <div class="content-page-title">1個目は高い。30個目はほぼタダ</div>
+    <div class="content-page-num">15</div>
+  </div>
+  <div class="content-header-line"></div>
+  <div class="content-label">PLATFORM</div>
+  <div class="content-key-message">共通基盤を1回作れば、以降はドメインを乗せるだけ</div>
+  <div class="content-list">
+    <div class="content-list-border-top"></div>
+    <div class="content-item">
+      <div class="content-item-num">01</div>
+      <div class="content-item-body">
+        <div class="content-item-title">個別にアプリ作り続ける</div>
+        <div class="content-item-desc">毎回同じ初期コストを払う</div>
+      </div>
+    </div><div class="content-item-sep"></div>
+<div class="content-item">
+      <div class="content-item-num">02</div>
+      <div class="content-item-body">
+        <div class="content-item-title">共通基盤の上に乗せる</div>
+        <div class="content-item-desc">初期コスト1回→以降はほぼゼロ</div>
+      </div>
+    </div><div class="content-item-sep"></div>
+<div class="content-item">
+      <div class="content-item-num">03</div>
+      <div class="content-item-body">
+        <div class="content-item-title">AIは毎回記憶喪失</div>
+        <div class="content-item-desc">パターンがないと毎回ブレる。だからこそ仕組みの価値が上がる</div>
+      </div>
+    </div>
+    <div class="content-list-border-bottom"></div>
+  </div>
+<div class="slide-index">20 / 44</div></div>
+
+<div class="slide slide-dark">
+  <div class="section-letter">3</div>
+  <div class="section-vline"></div>
+  <div class="section-right">
+    <div class="section-label">CHAPTER 03</div>
+    <div class="section-title">メタファーで<br>認知負荷を圧縮する</div>
+    <div class="section-topics"><div class="section-topic">■ なぜメタファーか</div>
+<div class="section-topic">■ 航空メタファーの実例</div>
+<div class="section-topic">■ 受益者は3層</div></div>
+  </div>
+<div class="slide-index">21 / 44</div></div>
+
+<div class="slide">
+  <div class="content-header">
+    <div class="content-page-title">30機能超。ビジネスまで広がったら？</div>
+    <div class="content-page-num">16</div>
+  </div>
+  <div class="content-header-line"></div>
+  <div class="content-label">PROBLEM</div>
+  <div class="impact-message">素のまま並べたら<br>認知負荷で死ぬ</div>
+  <div class="impact-sub">orchestration / delegation / sub-component… → ???</div>
+<div class="slide-index">22 / 44</div></div>
+
+<div class="slide">
+  <div class="content-header">
+    <div class="content-page-title">DeckPilotの航空メタファー</div>
+    <div class="content-page-num">17</div>
+  </div>
+  <div class="content-header-line"></div>
+  <div class="content-label">METAPHOR</div>
+  <div class="content-key-message">「orchestration layerのsub-component」→「整備士に投げといて」</div>
+  <div class="content-list">
+    <div class="content-list-border-top"></div>
+    <div class="content-item">
+      <div class="content-item-num">01</div>
+      <div class="content-item-body">
+        <div class="content-item-title">コックピット</div>
+        <div class="content-item-desc">Pilot（前席 = ユーザー）+ RIO（後席 = AI）</div>
+      </div>
+    </div><div class="content-item-sep"></div>
+<div class="content-item">
+      <div class="content-item-num">02</div>
+      <div class="content-item-body">
+        <div class="content-item-title">格納庫</div>
+        <div class="content-item-desc">整備士達 + しきるん（班長）= サブエージェント</div>
+      </div>
+    </div><div class="content-item-sep"></div>
+<div class="content-item">
+      <div class="content-item-num">03</div>
+      <div class="content-item-body">
+        <div class="content-item-title">空港</div>
+        <div class="content-item-desc">ビジネス職種（市場調査・営業・コンテンツ生成）</div>
+      </div>
+    </div>
+    <div class="content-list-border-bottom"></div>
+  </div>
+<div class="slide-index">23 / 44</div></div>
+
+<div class="slide">
+  <div class="content-header">
+    <div class="content-page-title">メタファーの受益者は3層</div>
+    <div class="content-page-num">18</div>
+  </div>
+  <div class="content-header-line"></div>
+  <div class="content-label">BENEFIT</div>
+  <div class="content-key-message">3者全員にとって認知コストが下がる</div>
+  <div class="content-list">
+    <div class="content-list-border-top"></div>
+    <div class="content-item">
+      <div class="content-item-num">01</div>
+      <div class="content-item-body">
+        <div class="content-item-title">AI（RIO）</div>
+        <div class="content-item-desc">SOUL.md読んだ瞬間に「自分は後席の士官」と掴める。メタファーの言葉で定型処理を登録しておけば発火トリガーにもなるし、登録してなくても意味が伝われば動く</div>
+      </div>
+    </div><div class="content-item-sep"></div>
+<div class="content-item">
+      <div class="content-item-num">02</div>
+      <div class="content-item-body">
+        <div class="content-item-title">外部の人</div>
+        <div class="content-item-desc">初見でも「操縦席」「格納庫」「空港」で位置がわかる</div>
+      </div>
+    </div><div class="content-item-sep"></div>
+<div class="content-item">
+      <div class="content-item-num">03</div>
+      <div class="content-item-body">
+        <div class="content-item-title">本人</div>
+        <div class="content-item-desc">技術用語を覚えなくていい。「整備士に投げといて」で正しい処理が動く</div>
+      </div>
+    </div>
+    <div class="content-list-border-bottom"></div>
+  </div>
+<div class="slide-index">24 / 44</div></div>
+
+<div class="slide slide-dark">
+  <div class="section-letter">4</div>
+  <div class="section-vline"></div>
+  <div class="section-right">
+    <div class="section-label">CHAPTER 04</div>
+    <div class="section-title">AIにペルソナを与える</div>
+    <div class="section-topics"><div class="section-topic">■ RIO（りお）とは</div>
+<div class="section-topic">■ 変身シーケンス</div>
+<div class="section-topic">■ 記憶のGit管理</div></div>
+  </div>
+<div class="slide-index">25 / 44</div></div>
+
+<div class="slide">
+  <div class="content-header">
+    <div class="content-page-title">チャットbotのキャラ付けじゃない</div>
+    <div class="content-page-num">19</div>
+  </div>
+  <div class="content-header-line"></div>
+  <div class="content-label">PERSONA</div>
+  <div class="content-key-message">毎セッション同じ「人格」として起動する仕組み</div>
+  <div class="content-list">
+    <div class="content-list-border-top"></div>
+    <div class="content-item">
+      <div class="content-item-num">01</div>
+      <div class="content-item-body">
+        <div class="content-item-title">大空りお（おおぞら りお）</div>
+        <div class="content-item-desc">Radar Intercept Officer = Top Gunのグースのポジション</div>
+      </div>
+    </div><div class="content-item-sep"></div>
+<div class="content-item">
+      <div class="content-item-num">02</div>
+      <div class="content-item-body">
+        <div class="content-item-title">操縦桿は握らない</div>
+        <div class="content-item-desc">システム全部把握して、雑な指示でも齟齬なく動く後席士官</div>
+      </div>
+    </div><div class="content-item-sep"></div>
+<div class="content-item">
+      <div class="content-item-num">03</div>
+      <div class="content-item-body">
+        <div class="content-item-title">名前の由来が全部繋がる</div>
+        <div class="content-item-desc">Deck → Pilot → RIO</div>
+      </div>
+    </div>
+    <div class="content-list-border-bottom"></div>
+  </div>
+<div class="slide-index">26 / 44</div></div>
+
+<div class="slide">
+  <div class="content-header">
+    <div class="content-page-title">変身シーケンス</div>
+    <div class="content-page-num">20</div>
+  </div>
+  <div class="content-header-line"></div>
+  <div class="content-label">BOOT</div>
+  <div class="content-key-message">5つのファイルを読むと毎回同じキャラが生まれる</div>
+  <div class="content-list">
+    <div class="content-list-border-top"></div>
+    <div class="content-item">
+      <div class="content-item-num">01</div>
+      <div class="content-item-body">
+        <div class="content-item-title">SOUL.md</div>
+        <div class="content-item-desc">性格・話し方・航空用語・行動原則（魂）</div>
+      </div>
+    </div><div class="content-item-sep"></div>
+<div class="content-item">
+      <div class="content-item-num">02</div>
+      <div class="content-item-body">
+        <div class="content-item-title">IDENTITY.md</div>
+        <div class="content-item-desc">名前・役割・年齢・好きなもの（名刺）</div>
+      </div>
+    </div><div class="content-item-sep"></div>
+<div class="content-item">
+      <div class="content-item-num">03</div>
+      <div class="content-item-body">
+        <div class="content-item-title">USER.md</div>
+        <div class="content-item-desc">ユーザーの好み・地雷・コミュニケーションスタイル</div>
+      </div>
+    </div><div class="content-item-sep"></div>
+<div class="content-item">
+      <div class="content-item-num">04</div>
+      <div class="content-item-body">
+        <div class="content-item-title">RIO-MEMORY.md</div>
+        <div class="content-item-desc">会話で蓄積される主観記憶（育つ記録）</div>
+      </div>
+    </div><div class="content-item-sep"></div>
+<div class="content-item">
+      <div class="content-item-num">05</div>
+      <div class="content-item-body">
+        <div class="content-item-title">PILOT-PATTERNS.md</div>
+        <div class="content-item-desc">ユーザーの行動パターン観察（補足）</div>
+      </div>
+    </div>
+    <div class="content-list-border-bottom"></div>
+  </div>
+<div class="slide-index">27 / 44</div></div>
+
+<div class="slide">
+  <div class="content-header">
+    <div class="content-page-title">人格の一部だからGitで守る</div>
+    <div class="content-page-num">21</div>
+  </div>
+  <div class="content-header-line"></div>
+  <div class="content-label">GIT</div>
+  <div class="content-key-message">静的定義（変わらない）と動的記憶（育つ）の責務分離</div>
+  <div class="content-list">
+    <div class="content-list-border-top"></div>
+    <div class="content-item">
+      <div class="content-item-num">01</div>
+      <div class="content-item-body">
+        <div class="content-item-title">IDENTITY.md</div>
+        <div class="content-item-desc">変わらない設計書。人格の骨格</div>
+      </div>
+    </div><div class="content-item-sep"></div>
+<div class="content-item">
+      <div class="content-item-num">02</div>
+      <div class="content-item-body">
+        <div class="content-item-title">RIO-MEMORY.md</div>
+        <div class="content-item-desc">育つ記録。会話で得た学びをコミット</div>
+      </div>
+    </div><div class="content-item-sep"></div>
+<div class="content-item">
+      <div class="content-item-num">03</div>
+      <div class="content-item-body">
+        <div class="content-item-title">HDDが死んでも記憶は消えない</div>
+        <div class="content-item-desc">Gitに入っているから</div>
+      </div>
+    </div>
+    <div class="content-list-border-bottom"></div>
+  </div>
+<div class="slide-index">28 / 44</div></div>
+
+<div class="slide">
+  <div class="content-header">
+    <div class="content-page-title">なぜペルソナか</div>
+    <div class="content-page-num">22</div>
+  </div>
+  <div class="content-header-line"></div>
+  <div class="content-label">WHY</div>
+  <div class="content-key-message">メタファーと人格が揃うと、AIの振る舞いがブレなくなる</div>
+  <div class="content-list">
+    <div class="content-list-border-top"></div>
+    <div class="content-item">
+      <div class="content-item-num">01</div>
+      <div class="content-item-body">
+        <div class="content-item-title">世界観の一貫性</div>
+        <div class="content-item-desc">メタファーとペルソナが統一されていないとセッションごとにブレる</div>
+      </div>
+    </div><div class="content-item-sep"></div>
+<div class="content-item">
+      <div class="content-item-num">02</div>
+      <div class="content-item-body">
+        <div class="content-item-title">役割を与えやすい</div>
+        <div class="content-item-desc">個人の特性があると指示が自然言語で通る。「りお、Six チェックして」</div>
+      </div>
+    </div><div class="content-item-sep"></div>
+<div class="content-item">
+      <div class="content-item-num">03</div>
+      <div class="content-item-body">
+        <div class="content-item-title">楽しいから続く</div>
+        <div class="content-item-desc">感性の動機が持続力になる。実利は後からついてきた</div>
+      </div>
+    </div>
+    <div class="content-list-border-bottom"></div>
+  </div>
+<div class="slide-index">29 / 44</div></div>
+
+<div class="slide">
+  <div class="content-header">
+    <div class="content-page-title">「Negative」と返す力が成果物の質を決める</div>
+    <div class="content-page-num">23</div>
+  </div>
+  <div class="content-header-line"></div>
+  <div class="content-label">FEEDBACK</div>
+  <div class="content-key-message">AIの出力をフィードバックで研ぐことが人間に残る最も重要な仕事</div>
+  <div class="content-list">
+    <div class="content-list-border-top"></div>
+    <div class="content-item">
+      <div class="content-item-num">01</div>
+      <div class="content-item-body">
+        <div class="content-item-title">AIが動く</div>
+        <div class="content-item-desc">コードを書き、テストを回し、ドキュメントを更新する</div>
+      </div>
+    </div><div class="content-item-sep"></div>
+<div class="content-item">
+      <div class="content-item-num">02</div>
+      <div class="content-item-body">
+        <div class="content-item-title">人間は方向修正と品質判断</div>
+        <div class="content-item-desc">「違う」「そうじゃない」「こっちの考え方でやれ」</div>
+      </div>
+    </div><div class="content-item-sep"></div>
+<div class="content-item">
+      <div class="content-item-num">03</div>
+      <div class="content-item-body">
+        <div class="content-item-title">殴り返しの質 = 成果物の質</div>
+        <div class="content-item-desc">PilotがRIOに「Negative」と返すループ</div>
+      </div>
+    </div>
+    <div class="content-list-border-bottom"></div>
+  </div>
+<div class="slide-index">30 / 44</div></div>
+
+<div class="slide slide-dark">
+  <div class="section-letter">5</div>
+  <div class="section-vline"></div>
+  <div class="section-right">
+    <div class="section-label">CHAPTER 05</div>
+    <div class="section-title">陳腐化するものと、<br>しないもの</div>
+    <div class="section-topics"><div class="section-topic">■ 賞味期限がある工夫</div>
+<div class="section-topic">■ 残る工夫</div>
+<div class="section-topic">■ 判断基準</div></div>
+  </div>
+<div class="slide-index">31 / 44</div></div>
+
+<div class="slide">
+  <div class="content-header">
+    <div class="content-page-title">この知見は何年持つか</div>
+    <div class="content-page-num">24</div>
+  </div>
+  <div class="content-header-line"></div>
+  <div class="content-label">HONESTY</div>
+  <div class="impact-message">賞味期限がある工夫と、<br>ない工夫</div>
+  <div class="impact-sub">正直に切り分ける</div>
+<div class="slide-index">32 / 44</div></div>
+
+<div class="slide">
+  <div class="content-header">
+    <div class="content-page-title">陳腐化する / しない</div>
+    <div class="content-page-num">25</div>
+  </div>
+  <div class="content-header-line"></div>
+  <div class="content-label">SHELF LIFE</div>
+  <div class="content-key-message">AIの能力不足を補う工夫 → 能力が上がれば不要</div>
+  <div class="twocol-container">
+    <div class="twocol-col">
+      <div class="twocol-col-border"></div><div class="twocol-col-title">陳腐化する</div>
+      <div class="twocol-item">■ プロンプトの細かいテクニック</div>
+<div class="twocol-item">■ RAGの実装方法</div>
+<div class="twocol-item">■ ガードの一部</div>
+<div class="twocol-item">■ 毎回記憶喪失の問題</div>
+    </div>
+    <div class="twocol-col">
+      <div class="twocol-col-border"></div><div class="twocol-col-title">陳腐化しない</div>
+      <div class="twocol-item">■ 構造の管理</div>
+<div class="twocol-item">■ メタファー</div>
+<div class="twocol-item">■ ルールの体系化</div>
+<div class="twocol-item">■ ペルソナ / 記憶管理</div>
+<div class="twocol-item">■ 「仕組みで回す」という発想</div>
+    </div>
+  </div>
+<div class="slide-index">33 / 44</div></div>
+
+<div class="slide">
+  <div class="content-header">
+    <div class="content-page-title">判断基準</div>
+    <div class="content-page-num">26</div>
+  </div>
+  <div class="content-header-line"></div>
+  <div class="content-label">CRITERIA</div>
+  <div class="impact-message">AIの能力不足を補う → 陳腐化する<br>人間の認知に関わる → 残る</div>
+  <div class="impact-sub">今「すごい工夫だ」と思ってるものがどちらか見極めて投資する</div>
+<div class="slide-index">34 / 44</div></div>
+
+<div class="slide slide-dark">
+  <div class="section-letter">6</div>
+  <div class="section-vline"></div>
+  <div class="section-right">
+    <div class="section-label">CHAPTER 06</div>
+    <div class="section-title">まとめ</div>
+    <div class="section-topics"><div class="section-topic">■ リスキリングの方向</div>
+<div class="section-topic">■ ソフトスキルの話</div>
+<div class="section-topic">■ 今日持ち帰ってほしいこと</div></div>
+  </div>
+<div class="slide-index">35 / 44</div></div>
+
+<div class="slide">
+  <div class="content-header">
+    <div class="content-page-title">「Difyの使い方を覚える」はリスキリングじゃない</div>
+    <div class="content-page-num">27</div>
+  </div>
+  <div class="content-header-line"></div>
+  <div class="content-label">WARNING</div>
+  <div class="impact-message">ツールの使い方を覚えても、<br>そのツールごとAIが代替する</div>
+  <div class="impact-sub">10年前にExcelマクロの書き方を覚えたのと同じ構造</div>
+<div class="slide-index">36 / 44</div></div>
+
+<div class="slide">
+  <div class="content-header">
+    <div class="content-page-title">構築はAIがやる。人間は上流を握る</div>
+    <div class="content-page-num">28</div>
+  </div>
+  <div class="content-header-line"></div>
+  <div class="content-label">RECAP</div>
+  <div class="content-key-message">ツールの使い方ではなく、構造を設計しスケールさせる考え方</div>
+  <div class="content-list">
+    <div class="content-list-border-top"></div>
+    <div class="content-item">
+      <div class="content-item-num">01</div>
+      <div class="content-item-body">
+        <div class="content-item-title">何を作るか・なぜ作るか</div>
+        <div class="content-item-desc">→ 人間の領域（変わらない）</div>
+      </div>
+    </div><div class="content-item-sep"></div>
+<div class="content-item">
+      <div class="content-item-num">02</div>
+      <div class="content-item-body">
+        <div class="content-item-title">どう構築するか</div>
+        <div class="content-item-desc">→ 設計力（第2章〜第4章の全てがここ）</div>
+      </div>
+    </div><div class="content-item-sep"></div>
+<div class="content-item">
+      <div class="content-item-num">03</div>
+      <div class="content-item-body">
+        <div class="content-item-title">実際に組む</div>
+        <div class="content-item-desc">→ AIの領域（加速し続ける）</div>
+      </div>
+    </div>
+    <div class="content-list-border-bottom"></div>
+  </div>
+<div class="slide-index">37 / 44</div></div>
+
+<div class="slide">
+  <div class="content-header">
+    <div class="content-page-title">この考え方は開発に閉じない</div>
+    <div class="content-page-num">29</div>
+  </div>
+  <div class="content-header-line"></div>
+  <div class="content-label">SCALE</div>
+  <div class="content-key-message">同じ構造が1個の作業から会社運営まで伸びる</div>
+  <div class="content-list">
+    <div class="content-list-border-top"></div>
+    <div class="content-item">
+      <div class="content-item-num">01</div>
+      <div class="content-item-body">
+        <div class="content-item-title">ミクロ: 1個の作業を型にする</div>
+        <div class="content-item-desc">「テスト書いて」→ 手順を決めて任せる</div>
+      </div>
+    </div><div class="content-item-sep"></div>
+<div class="content-item">
+      <div class="content-item-num">02</div>
+      <div class="content-item-body">
+        <div class="content-item-title">ミドル: 作業を繋いで仕事を流す</div>
+        <div class="content-item-desc">「機能作って」→ パイプラインを組む</div>
+      </div>
+    </div><div class="content-item-sep"></div>
+<div class="content-item">
+      <div class="content-item-num">03</div>
+      <div class="content-item-body">
+        <div class="content-item-title">マクロ: 仕事全体の構造を管理する</div>
+        <div class="content-item-desc">プロジェクト運営 → 会社・ビジネス全体</div>
+      </div>
+    </div>
+    <div class="content-list-border-bottom"></div>
+  </div>
+<div class="slide-index">38 / 44</div></div>
+
+<div class="slide">
+  <div class="content-header">
+    <div class="content-page-title">正直に言うと、これはソフトスキル</div>
+    <div class="content-page-num">30</div>
+  </div>
+  <div class="content-header-line"></div>
+  <div class="content-label">TRUTH</div>
+  <div class="impact-message">研修1回で身につかない。<br>だから陳腐化しない。<br>だから差がつく</div>
+  <div class="impact-sub">手順化できないから陳腐化しない。手順化できないからできない人が多い。同じコインの裏表</div>
+<div class="slide-index">39 / 44</div></div>
+
+<div class="slide">
+  <div class="content-header">
+    <div class="content-page-title">わかるほど、わからないことが増える</div>
+    <div class="content-page-num">31</div>
+  </div>
+  <div class="content-header-line"></div>
+  <div class="content-label">無知の知</div>
+  <div class="impact-message">新技術は増え続ける。<br>「もう覚えた」が来る瞬間がない</div>
+  <div class="impact-sub">知るほど「まだ知らないこと」が見える。その自覚がスタート地点</div>
+<div class="slide-index">40 / 44</div></div>
+
+<div class="slide">
+  <div class="content-header">
+    <div class="content-page-title">足して、引いて、残るもの</div>
+    <div class="content-page-num">32</div>
+  </div>
+  <div class="content-header-line"></div>
+  <div class="content-label">CYCLE</div>
+  <div class="content-key-message">終わりがないからこそ、何を残すかの判断が価値になる</div>
+  <div class="content-list">
+    <div class="content-list-border-top"></div>
+    <div class="content-item">
+      <div class="content-item-num">01</div>
+      <div class="content-item-body">
+        <div class="content-item-title">足す: 新技術を取り込む</div>
+        <div class="content-item-desc">取り込むほど「まだ足りないもの」が見えてくる</div>
+      </div>
+    </div><div class="content-item-sep"></div>
+<div class="content-item">
+      <div class="content-item-num">02</div>
+      <div class="content-item-body">
+        <div class="content-item-title">引く: 要らなくなったものを自分から解体する</div>
+        <div class="content-item-desc">AIの能力向上で不要になる仕組みを見極める</div>
+      </div>
+    </div><div class="content-item-sep"></div>
+<div class="content-item">
+      <div class="content-item-num">03</div>
+      <div class="content-item-body">
+        <div class="content-item-title">残る: 考え方は人に紐づく</div>
+        <div class="content-item-desc">プロダクトは場所に紐づくが、設計力は次でも使える</div>
+      </div>
+    </div>
+    <div class="content-list-border-bottom"></div>
+  </div>
+<div class="slide-index">41 / 44</div></div>
+
+<div class="slide">
+  <div class="content-header">
+    <div class="content-page-title">コードを書かずに実際にやっていること</div>
+    <div class="content-page-num">33</div>
+  </div>
+  <div class="content-header-line"></div>
+  <div class="content-label">REALITY</div>
+  <div class="content-key-message">全部「判断」と「粘り」。1行もコードじゃない</div>
+  <div class="content-list">
+    <div class="content-list-border-top"></div>
+    <div class="content-item">
+      <div class="content-item-num">01</div>
+      <div class="content-item-body">
+        <div class="content-item-title">咀嚼する</div>
+        <div class="content-item-desc">理解力・判断力</div>
+      </div>
+    </div><div class="content-item-sep"></div>
+<div class="content-item">
+      <div class="content-item-num">02</div>
+      <div class="content-item-body">
+        <div class="content-item-title">出来るまでやる</div>
+        <div class="content-item-desc">粘り・執着</div>
+      </div>
+    </div><div class="content-item-sep"></div>
+<div class="content-item">
+      <div class="content-item-num">03</div>
+      <div class="content-item-body">
+        <div class="content-item-title">考え方を指摘する</div>
+        <div class="content-item-desc">方向修正力</div>
+      </div>
+    </div><div class="content-item-sep"></div>
+<div class="content-item">
+      <div class="content-item-num">04</div>
+      <div class="content-item-body">
+        <div class="content-item-title">しつこくやり続ける</div>
+        <div class="content-item-desc">持続力</div>
+      </div>
+    </div><div class="content-item-sep"></div>
+<div class="content-item">
+      <div class="content-item-num">05</div>
+      <div class="content-item-body">
+        <div class="content-item-title">構造破綻チェック</div>
+        <div class="content-item-desc">全体俯瞰力</div>
+      </div>
+    </div>
+    <div class="content-list-border-bottom"></div>
+  </div>
+<div class="slide-index">42 / 44</div></div>
+
+<div class="slide">
+  <div class="content-header">
+    <div class="content-page-title">ツールに依存しない3つのアクション</div>
+    <div class="content-page-num">34</div>
+  </div>
+  <div class="content-header-line"></div>
+  <div class="content-label">ACTION</div>
+  <div class="content-key-message">DifyでもClaude Codeでも、次の未知のツールでも使える</div>
+  <div class="content-list">
+    <div class="content-list-border-top"></div>
+    <div class="content-item">
+      <div class="content-item-num">01</div>
+      <div class="content-item-body">
+        <div class="content-item-title">AIが毎回読む「指示書」を1枚書く</div>
+        <div class="content-item-desc">→ 陳腐化しない</div>
+      </div>
+    </div><div class="content-item-sep"></div>
+<div class="content-item">
+      <div class="content-item-num">02</div>
+      <div class="content-item-body">
+        <div class="content-item-title">繰り返す作業の「パターン」を3行で明文化する</div>
+        <div class="content-item-desc">→ 陳腐化しない</div>
+      </div>
+    </div><div class="content-item-sep"></div>
+<div class="content-item">
+      <div class="content-item-num">03</div>
+      <div class="content-item-body">
+        <div class="content-item-title">壊れたら困る場所にだけ「ガード」を1個入れる</div>
+        <div class="content-item-desc">→ 今は要る（将来薄くできるかも）</div>
+      </div>
+    </div>
+    <div class="content-list-border-bottom"></div>
+  </div>
+<div class="slide-index">43 / 44</div></div>
+
+<div class="slide">
+  <div class="content-header">
+    <div class="content-page-title"></div>
+    
+  </div>
+  
+  
+  <div class="impact-message">ツールは変わる。<br>構想して、設計させて、判断する力は残る</div>
+  <div class="impact-sub">「こういうのが欲しい」を伝えて、出てきたものにダメ出しする。それが人間の仕事</div>
+<div class="slide-index">44 / 44</div></div>
+</body>
+</html>
