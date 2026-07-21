@@ -1,0 +1,742 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI 2040 — Plan A 図解</title>
+<style>*{box-sizing:border-box}html,body{margin:0;padding:0}img{max-width:100%}</style>
+</head>
+<body>
+<style>
+  :root {
+    --bg: #eceff3;
+    --surface: #ffffff;
+    --surface-2: #f3f6f9;
+    --sidebar-bg: #11161d;
+    --sidebar-ink: #cdd6e0;
+    --sidebar-faint: #7f8b99;
+    --sidebar-line: #232c37;
+    --ink: #141b23;
+    --ink-soft: #4a5663;
+    --ink-faint: #7d8a98;
+    --line: #d7dee6;
+    --line-soft: #e6ebf1;
+    --accent: #0d9488;
+    --accent-ink: #0a6f66;
+
+    --plan-d: #6a4bd0;
+    --plan-c: #dd8a2c;
+    --plan-b: #d24444;
+    --plan-a: #10a394;
+    --plan-s: #56626f;
+
+    --risk: #d24444;
+    --warn: #cf9a2f;
+    --safe: #2f9e58;
+
+    --shadow: 0 1px 2px rgba(20,30,45,.05), 0 10px 30px -16px rgba(20,30,45,.25);
+    --radius: 13px;
+    --sbw: 268px;
+
+    --font-body: "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+    --font-mono: "Cascadia Mono", "Consolas", ui-monospace, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0a0e13; --surface: #131a22; --surface-2: #19222c;
+      --sidebar-bg: #0c1117; --sidebar-ink: #cdd6e0; --sidebar-faint: #6c7a8a; --sidebar-line: #1d2630;
+      --ink: #e9eff6; --ink-soft: #a7b4c2; --ink-faint: #6c7a8a;
+      --line: #26313d; --line-soft: #1e2833;
+      --accent: #2dd4bf; --accent-ink: #5fe6d4;
+      --plan-d: #9276ee; --plan-c: #ecab52; --plan-b: #ef6b6b; --plan-a: #2dd4bf; --plan-s: #8894a2;
+      --risk: #ef6b6b; --warn: #e6bb52; --safe: #57c47f;
+      --shadow: 0 1px 2px rgba(0,0,0,.4), 0 12px 34px -18px rgba(0,0,0,.7);
+    }
+  }
+  :root[data-theme="light"] {
+    --bg:#eceff3;--surface:#fff;--surface-2:#f3f6f9;--sidebar-bg:#11161d;--sidebar-ink:#cdd6e0;--sidebar-faint:#7f8b99;--sidebar-line:#232c37;
+    --ink:#141b23;--ink-soft:#4a5663;--ink-faint:#7d8a98;--line:#d7dee6;--line-soft:#e6ebf1;--accent:#0d9488;--accent-ink:#0a6f66;
+    --plan-d:#6a4bd0;--plan-c:#dd8a2c;--plan-b:#d24444;--plan-a:#10a394;--plan-s:#56626f;--risk:#d24444;--warn:#cf9a2f;--safe:#2f9e58;
+    --shadow:0 1px 2px rgba(20,30,45,.05),0 10px 30px -16px rgba(20,30,45,.25);
+  }
+  :root[data-theme="dark"] {
+    --bg:#0a0e13;--surface:#131a22;--surface-2:#19222c;--sidebar-bg:#0c1117;--sidebar-ink:#cdd6e0;--sidebar-faint:#6c7a8a;--sidebar-line:#1d2630;
+    --ink:#e9eff6;--ink-soft:#a7b4c2;--ink-faint:#6c7a8a;--line:#26313d;--line-soft:#1e2833;--accent:#2dd4bf;--accent-ink:#5fe6d4;
+    --plan-d:#9276ee;--plan-c:#ecab52;--plan-b:#ef6b6b;--plan-a:#2dd4bf;--plan-s:#8894a2;--risk:#ef6b6b;--warn:#e6bb52;--safe:#57c47f;
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 12px 34px -18px rgba(0,0,0,.7);
+  }
+
+  * { box-sizing: border-box; }
+  body { margin: 0; }
+  :root { scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) { :root { scroll-behavior: auto; } }
+
+  .page {
+    background: var(--bg); color: var(--ink);
+    font-family: var(--font-body); line-height: 1.7; font-size: 1.01rem;
+    -webkit-font-smoothing: antialiased;
+  }
+  .layout { display: grid; grid-template-columns: var(--sbw) minmax(0, 1fr); max-width: 1240px; margin: 0 auto; align-items: start; }
+
+  /* ---------- SIDEBAR ---------- */
+  .sidebar {
+    position: sticky; top: 0; height: 100vh; overflow-y: auto;
+    background: var(--sidebar-bg); color: var(--sidebar-ink);
+    padding: 26px 16px 32px; border-right: 1px solid var(--sidebar-line); min-width: 0;
+  }
+  .brand { padding: 0 8px 18px; border-bottom: 1px solid var(--sidebar-line); margin-bottom: 14px; }
+  .brand .bt { font-size: 1.5rem; font-weight: 800; letter-spacing: -.02em; }
+  .brand .bt em { color: var(--accent); font-style: normal; }
+  .brand .bs { font-size: .78rem; color: var(--sidebar-faint); margin-top: 2px; font-family: var(--font-mono); letter-spacing: .02em; }
+
+  .nav-group { margin-top: 16px; }
+  .nav-group > .gl {
+    font-family: var(--font-mono); font-size: .64rem; letter-spacing: .18em; text-transform: uppercase;
+    color: var(--sidebar-faint); padding: 0 10px; margin-bottom: 6px;
+  }
+  .nav a {
+    display: flex; align-items: center; gap: 10px; text-decoration: none;
+    color: var(--sidebar-ink); padding: 8px 10px; border-radius: 9px; font-size: .92rem;
+    border-left: 2px solid transparent; transition: background .15s, color .15s;
+  }
+  .nav a:hover { background: rgba(255,255,255,.05); }
+  .nav a.active { background: rgba(255,255,255,.08); color: #fff; font-weight: 600; }
+  .nav a .yr { font-family: var(--font-mono); font-weight: 700; font-size: .95rem; color: var(--accent); min-width: 42px; }
+  .nav a.active .yr { color: var(--accent-ink); }
+  .nav a.sub { padding-left: 12px; }
+  .plan-badge-s {
+    display: inline-grid; place-items: center; width: 26px; height: 26px; border-radius: 7px;
+    font-family: var(--font-mono); font-weight: 800; font-size: .82rem; color: #fff; flex: 0 0 auto;
+  }
+  .nav a .pl-name { font-weight: 600; }
+  .nav a .pl-en { font-size: .68rem; color: var(--sidebar-faint); font-family: var(--font-mono); letter-spacing: .02em; }
+  .nav a .pl-txt { display: flex; flex-direction: column; line-height: 1.25; }
+  .nav a.active { border-left-color: currentColor; }
+  .mini-tag {
+    margin-left: auto; font-family: var(--font-mono); font-size: .58rem; letter-spacing: .06em;
+    padding: 2px 6px; border-radius: 20px; font-weight: 700; white-space: nowrap;
+  }
+  .mini-tag.rec { background: color-mix(in srgb, var(--plan-a) 26%, transparent); color: #fff; }
+  .mini-tag.likely { background: color-mix(in srgb, var(--plan-d) 34%, transparent); color: #fff; }
+
+  /* ---------- CONTENT ---------- */
+  .content { padding: 0 clamp(20px, 4vw, 56px) 80px; min-width: 0; }
+  section { padding: 46px 0 8px; scroll-margin-top: 12px; }
+  section + section { border-top: 1px solid var(--line-soft); }
+  .eyebrow {
+    font-family: var(--font-mono); font-size: .7rem; letter-spacing: .2em; text-transform: uppercase;
+    font-weight: 600; margin: 0 0 12px; display: flex; align-items: center; gap: 10px;
+  }
+  .eyebrow .yb {
+    font-size: .82rem; letter-spacing: 0; background: var(--ink); color: var(--bg);
+    padding: 2px 9px; border-radius: 6px; font-weight: 800;
+  }
+  h1,h2,h3 { text-wrap: balance; line-height: 1.16; letter-spacing: -.01em; }
+  .content h2 { font-size: clamp(1.55rem, 3.4vw, 2.2rem); font-weight: 800; margin: 0 0 8px; }
+  .lede { color: var(--ink-soft); max-width: 64ch; font-size: 1.05rem; margin: 8px 0 0; }
+  .prose { max-width: 66ch; }
+  .prose p { color: var(--ink-soft); }
+  strong { color: var(--ink); font-weight: 700; }
+
+  /* intro hero */
+  .intro-hero { padding-top: 44px; }
+  .kick { font-family: var(--font-mono); font-size: .74rem; letter-spacing: .26em; text-transform: uppercase; color: var(--ink-faint); margin: 0 0 18px; }
+  .intro-hero h1 { font-size: clamp(2rem, 5vw, 3.1rem); font-weight: 800; letter-spacing: -.03em; margin: 0 0 12px; }
+  .intro-hero h1 em { color: var(--accent); font-style: normal; }
+  .intro-hero .lede { font-size: 1.12rem; }
+
+  /* reframe callout */
+  .reframe {
+    margin-top: 26px; background: var(--surface); border: 1px solid var(--line);
+    border-left: 4px solid var(--plan-a); border-radius: var(--radius); padding: 20px 22px; box-shadow: var(--shadow);
+  }
+  .reframe h3 { margin: 0 0 8px; font-size: 1.05rem; }
+  .reframe p { margin: 0; color: var(--ink-soft); font-size: .96rem; }
+  .reframe .big { color: var(--ink); font-weight: 700; }
+
+  /* dangers strip */
+  .danger-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-top: 22px; }
+  .danger { background: var(--surface); border: 1px solid var(--line); border-radius: 11px; padding: 14px 15px; box-shadow: var(--shadow); position: relative; }
+  .danger .num { font-family: var(--font-mono); font-size: .66rem; color: var(--risk); font-weight: 700; }
+  .danger h4 { margin: 5px 0 3px; font-size: .95rem; }
+  .danger p { margin: 0; font-size: .82rem; color: var(--ink-soft); line-height: 1.5; }
+
+  /* timeline (common route) */
+  .timeline { margin-top: 22px; }
+  .tl-item { position: relative; padding: 0 0 26px 74px; }
+  .tl-item::before { content:""; position: absolute; left: 27px; top: 8px; bottom: -4px; width: 2px; background: var(--line); }
+  .tl-item:last-child::before { display: none; }
+  .tl-year { position: absolute; left: 0; top: 0; width: 54px; text-align: right; font-family: var(--font-mono); font-weight: 700; font-size: .9rem; color: var(--accent-ink); }
+  .tl-dot { position: absolute; left: 21px; top: 6px; width: 14px; height: 14px; border-radius: 50%; background: var(--accent); border: 3px solid var(--surface); box-shadow: 0 0 0 1px var(--accent); z-index: 1; }
+  .tl-item h3 { margin: 0 0 3px; font-size: 1.05rem; }
+  .tl-item p { margin: 0; color: var(--ink-soft); font-size: .93rem; }
+
+  /* fork */
+  .fork {
+    margin-top: 22px; background: var(--sidebar-bg); color: #fff; border-radius: var(--radius);
+    padding: 22px 22px 26px; text-align: center;
+  }
+  .fork .fh { font-family: var(--font-mono); font-weight: 800; font-size: 1.15rem; letter-spacing: .04em; }
+  .fork .fh .yr { color: var(--accent); }
+  .fork .fq { color: #b9c4d0; font-size: .92rem; margin: 4px 0 20px; }
+  .branches { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .branch-l { font-size: .82rem; font-weight: 700; color: #e7edf3; margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px dashed rgba(255,255,255,.18); }
+  .bchips { display: flex; flex-direction: column; gap: 8px; }
+  .chip {
+    display: flex; align-items: center; gap: 9px; text-decoration: none; text-align: left;
+    background: rgba(255,255,255,.06); border-radius: 9px; padding: 9px 11px; color: #fff;
+    border: 1px solid transparent; transition: background .15s, border-color .15s;
+  }
+  .chip:hover { background: rgba(255,255,255,.12); border-color: var(--pc); }
+  .chip .cb { width: 28px; height: 28px; border-radius: 7px; display: grid; place-items: center; font-family: var(--font-mono); font-weight: 800; font-size: .9rem; background: var(--pc); flex: 0 0 auto; }
+  .chip .cn { font-size: .82rem; line-height: 1.2; }
+  .chip .cn small { display: block; color: #aab5c1; font-family: var(--font-mono); font-size: .62rem; }
+  @media (max-width: 640px) { .branches { grid-template-columns: 1fr; } }
+
+  /* probability */
+  .prob-wrap { margin-top: 26px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 20px 22px; box-shadow: var(--shadow); }
+  .prob-wrap h3 { margin: 0 0 4px; font-size: 1.1rem; }
+  .prob-wrap .sub { color: var(--ink-soft); font-size: .9rem; margin: 0 0 16px; }
+  table.prob { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+  table.prob th, table.prob td { text-align: left; padding: 7px 8px; font-size: .9rem; }
+  table.prob thead th { font-family: var(--font-mono); font-size: .68rem; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-faint); border-bottom: 1px solid var(--line); }
+  table.prob tbody tr + tr td { border-top: 1px solid var(--line-soft); }
+  table.prob .who { font-weight: 600; }
+  .barcell { display: flex; align-items: center; gap: 9px; }
+  .bar { height: 9px; border-radius: 5px; min-width: 3px; }
+  .bar.a { background: var(--plan-a); }
+  .bar.d { background: var(--plan-d); }
+  .barcell .pv { font-family: var(--font-mono); font-weight: 700; font-size: .82rem; min-width: 34px; }
+  table.prob tfoot td { padding-top: 12px; font-size: .82rem; color: var(--ink-soft); }
+
+  .naming { margin-top: 18px; display: grid; grid-template-columns: repeat(auto-fit, minmax(180px,1fr)); gap: 10px; }
+  .nm { background: var(--surface-2); border: 1px solid var(--line); border-radius: 10px; padding: 11px 13px; font-size: .84rem; color: var(--ink-soft); }
+  .nm b { font-family: var(--font-mono); }
+
+  /* PLAN SECTIONS */
+  .plan-head { display: flex; align-items: center; gap: 16px; margin-bottom: 6px; flex-wrap: wrap; }
+  .plan-mark { width: 58px; height: 58px; border-radius: 14px; display: grid; place-items: center; font-family: var(--font-mono); font-weight: 800; font-size: 1.9rem; color: #fff; background: var(--pc); flex: 0 0 auto; box-shadow: var(--shadow); }
+  .plan-titles .en { font-family: var(--font-mono); font-size: .72rem; letter-spacing: .14em; text-transform: uppercase; color: var(--pc); font-weight: 700; }
+  .plan-titles h2 { margin: 0; font-size: clamp(1.5rem,3.4vw,2.1rem); }
+  .p-tag { margin-left: auto; align-self: center; font-family: var(--font-mono); font-size: .68rem; letter-spacing: .06em; padding: 5px 11px; border-radius: 20px; font-weight: 800; }
+  .p-tag.rec { background: color-mix(in srgb, var(--plan-a) 16%, transparent); color: var(--plan-a); border: 1px solid color-mix(in srgb, var(--plan-a) 40%, transparent); }
+  .p-tag.likely { background: color-mix(in srgb, var(--plan-d) 15%, transparent); color: var(--plan-d); border: 1px solid color-mix(in srgb, var(--plan-d) 42%, transparent); }
+  .p-tag.alt { background: color-mix(in srgb, var(--plan-s) 16%, transparent); color: var(--plan-s); border: 1px solid color-mix(in srgb, var(--plan-s) 40%, transparent); }
+  .plan-what { color: var(--ink-soft); max-width: 64ch; margin: 12px 0 0; }
+
+  .pc-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 18px; }
+  @media (max-width: 620px) { .pc-cols { grid-template-columns: 1fr; } }
+  .pc-box { background: var(--surface); border: 1px solid var(--line); border-radius: 11px; padding: 15px 17px; box-shadow: var(--shadow); }
+  .pc-box .h { font-family: var(--font-mono); font-size: .66rem; letter-spacing: .1em; text-transform: uppercase; font-weight: 700; margin-bottom: 7px; }
+  .pc-box.pro .h { color: var(--safe); }
+  .pc-box.con .h { color: var(--risk); }
+  .pc-box ul { margin: 0; padding-left: 18px; }
+  .pc-box li { font-size: .88rem; color: var(--ink-soft); margin: 4px 0; }
+
+  .likely-banner {
+    margin-top: 16px; background: color-mix(in srgb, var(--plan-d) 12%, var(--surface));
+    border: 1px solid color-mix(in srgb, var(--plan-d) 40%, transparent);
+    border-radius: 11px; padding: 14px 18px; font-size: .93rem; color: var(--ink-soft);
+  }
+  .likely-banner b { color: var(--plan-d); }
+
+  /* timeline in plan color */
+  .timeline.pc .tl-dot { background: var(--pc); box-shadow: 0 0 0 1px var(--pc); }
+  .timeline.pc .tl-year { color: var(--pc); }
+
+  /* triple-risk cards (D) */
+  .triple { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 14px; }
+  @media (max-width: 620px) { .triple { grid-template-columns: 1fr; } }
+  .trisk { background: var(--surface); border: 1px solid var(--line); border-top: 3px solid var(--risk); border-radius: 11px; padding: 14px 16px; box-shadow: var(--shadow); }
+  .trisk .ti { font-size: 1.35rem; line-height: 1; }
+  .trisk h4 { margin: 8px 0 4px; font-size: .95rem; }
+  .trisk p { margin: 0; font-size: .83rem; color: var(--ink-soft); line-height: 1.5; }
+
+  /* step sequence (C) */
+  .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 14px; }
+  @media (max-width: 620px) { .steps { grid-template-columns: 1fr; } }
+  .step { background: var(--surface); border: 1px solid var(--line); border-radius: 11px; padding: 15px 16px; box-shadow: var(--shadow); border-left: 3px solid var(--pc); }
+  .step .sn { font-family: var(--font-mono); font-weight: 800; color: var(--pc); font-size: .68rem; letter-spacing: .08em; }
+  .step h4 { margin: 6px 0 4px; font-size: .96rem; }
+  .step p { margin: 0; font-size: .84rem; color: var(--ink-soft); line-height: 1.5; }
+
+  /* escalation ladder (B) */
+  .ladder { margin-top: 14px; display: flex; flex-direction: column; gap: 6px; }
+  .rung { display: grid; grid-template-columns: 18px 1fr clamp(72px, 20vw, 150px); align-items: center; gap: 12px; background: var(--surface); border: 1px solid var(--line); border-left: 4px solid var(--pc); border-radius: 9px; padding: 9px 14px; box-shadow: var(--shadow); }
+  .rung .lv { font-family: var(--font-mono); font-weight: 800; font-size: .72rem; color: var(--pc); }
+  .rung .lt { font-size: .88rem; min-width: 0; }
+  .rung .track { height: 8px; border-radius: 4px; background: color-mix(in srgb, var(--pc) 16%, transparent); overflow: hidden; }
+  .rung .track > i { display: block; height: 100%; background: var(--pc); border-radius: 4px; opacity: .9; }
+
+  /* dilemma two-box (B) */
+  .dilemma { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 14px; }
+  @media (max-width: 520px) { .dilemma { grid-template-columns: 1fr; } }
+  .dil { border-radius: 11px; padding: 15px 17px; border: 1px solid var(--line); background: var(--surface); box-shadow: var(--shadow); }
+  .dil .dh { font-family: var(--font-mono); font-weight: 800; font-size: .78rem; letter-spacing: .08em; margin-bottom: 6px; }
+  .dil.handoff { border-top: 3px solid var(--warn); } .dil.handoff .dh { color: var(--warn); }
+  .dil.war { border-top: 3px solid var(--risk); } .dil.war .dh { color: var(--risk); }
+  .dil p { margin: 0; font-size: .85rem; color: var(--ink-soft); line-height: 1.5; }
+
+  /* allowed vs banned (S) */
+  .ab { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 14px; }
+  @media (max-width: 520px) { .ab { grid-template-columns: 1fr; } }
+  .ab .col { background: var(--surface); border: 1px solid var(--line); border-radius: 11px; padding: 14px 16px; box-shadow: var(--shadow); }
+  .ab .col.ok { border-top: 3px solid var(--safe); }
+  .ab .col.no { border-top: 3px solid var(--risk); }
+  .ab .col h4 { margin: 0 0 8px; font-size: .9rem; display: flex; gap: 7px; align-items: center; }
+  .ab .col.ok h4 { color: var(--safe); }
+  .ab .col.no h4 { color: var(--risk); }
+  .ab ul { margin: 0; padding-left: 18px; }
+  .ab li { font-size: .85rem; color: var(--ink-soft); margin: 5px 0; }
+
+  /* Plan A rich */
+  .subhead { font-family: var(--font-mono); font-size: .7rem; letter-spacing: .16em; text-transform: uppercase; color: var(--accent-ink); font-weight: 700; margin: 34px 0 12px; }
+  .principles { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px,1fr)); gap: 12px; }
+  .principle { background: var(--surface); border: 1px solid var(--line); border-radius: 11px; padding: 16px; box-shadow: var(--shadow); display: flex; gap: 13px; }
+  .principle .pn { flex: 0 0 auto; width: 34px; height: 34px; border-radius: 9px; display: grid; place-items: center; font-family: var(--font-mono); font-weight: 800; background: color-mix(in srgb, var(--accent) 16%, transparent); color: var(--accent-ink); }
+  .principle h4 { margin: 2px 0 5px; font-size: .98rem; }
+  .principle p { margin: 0; font-size: .86rem; color: var(--ink-soft); line-height: 1.5; }
+
+  .figbox { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow); margin-top: 14px; overflow-x: auto; }
+  .figbox svg { display: block; width: 100%; min-width: 520px; height: auto; }
+  .fignote { font-size: .86rem; color: var(--ink-soft); margin: 12px 0 0; max-width: 62ch; }
+
+  .stat-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px,1fr)); gap: 12px; margin-top: 4px; }
+  .stat { background: var(--surface); border: 1px solid var(--line); border-radius: 11px; padding: 16px; box-shadow: var(--shadow); }
+  .stat .k { font-family: var(--font-mono); font-size: .64rem; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-faint); }
+  .stat .v { font-size: clamp(1.5rem,3.6vw,2rem); font-weight: 800; color: var(--accent); margin: 5px 0 2px; font-variant-numeric: tabular-nums; }
+  .stat .d { font-size: .8rem; color: var(--ink-soft); }
+
+  .callout { border-radius: var(--radius); padding: 16px 20px; margin-top: 16px; border: 1px solid var(--line); background: var(--surface-2); }
+  .callout.warn { border-left: 4px solid var(--warn); }
+  .callout h4 { margin: 0 0 8px; font-size: .95rem; display: flex; align-items: center; gap: 8px; }
+  .callout h4 .ic { font-family: var(--font-mono); font-size: .62rem; padding: 3px 7px; border-radius: 5px; letter-spacing: .08em; background: color-mix(in srgb, var(--warn) 22%, transparent); color: var(--warn); }
+  .callout p, .callout li { font-size: .88rem; color: var(--ink-soft); }
+  .callout ul { margin: 4px 0 0; padding-left: 18px; }
+
+  /* crux */
+  .crux { background: var(--ink); border-radius: var(--radius); padding: 30px 28px; margin-top: 22px; }
+  .crux .eyebrow { color: var(--accent); }
+  .crux h2 { color: var(--bg); }
+  :root[data-theme="light"] .crux h2 { color: #fff; }
+  .crux > p { color: color-mix(in srgb, var(--surface) 78%, transparent); max-width: 62ch; }
+  .crux .vs { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 18px; }
+  .crux .vs > div { flex: 1; min-width: 210px; background: color-mix(in srgb, var(--surface) 9%, transparent); border-radius: 10px; padding: 15px 17px; }
+  .crux .vs .lbl { font-family: var(--font-mono); font-weight: 800; margin-bottom: 5px; }
+  .crux .vs .a .lbl { color: var(--plan-a); }
+  .crux .vs .s .lbl { color: var(--plan-s); }
+  .crux .vs p { font-size: .88rem; color: color-mix(in srgb, var(--surface) 72%, transparent); margin: 0; }
+
+  footer { margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--line); color: var(--ink-faint); font-size: .82rem; }
+  footer .src { font-family: var(--font-mono); }
+  footer a { color: var(--accent-ink); }
+
+  /* ---------- MOBILE ---------- */
+  @media (max-width: 860px) {
+    .layout { grid-template-columns: minmax(0, 1fr); }
+    .sidebar {
+      position: sticky; top: 0; height: auto; max-height: none; overflow: visible;
+      padding: 12px 12px; border-right: none; border-bottom: 1px solid var(--sidebar-line); z-index: 30;
+    }
+    .brand { display: flex; align-items: baseline; gap: 12px; padding-bottom: 12px; margin-bottom: 10px; }
+    .brand .bt { font-size: 1.15rem; }
+    .brand .bs { font-size: .7rem; }
+    .nav-groups { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; }
+    .nav-group { margin-top: 0; flex: 0 0 auto; }
+    .nav-group > .gl { display: none; }
+    .nav { display: flex; gap: 6px; }
+    .nav a { padding: 6px 10px; white-space: nowrap; }
+    .nav a .yr { min-width: 0; }
+    .nav a .pl-en, .mini-tag { display: none; }
+    section { scroll-margin-top: 96px; }
+  }
+</style>
+
+<div class="page">
+<div class="layout">
+
+  <!-- ============ SIDEBAR ============ -->
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="bt">AI <em>2040</em></div>
+      <div class="bs">運命が分かれる2029年</div>
+    </div>
+    <div class="nav-groups">
+      <nav class="nav">
+        <div class="nav-group">
+          <div class="gl">はじめに</div>
+          <a href="#intro"><span class="yr">◎</span><span class="pl-txt"><span class="pl-name">この文書は何か</span></span></a>
+        </div>
+        <div class="nav-group">
+          <div class="gl">共通ルート 2027–2029</div>
+          <a href="#y2027"><span class="yr">2027</span><span class="pl-txt"><span class="pl-name">第二の労働力</span></span></a>
+          <a href="#y2028"><span class="yr">2028</span><span class="pl-txt"><span class="pl-name">最大の争点に</span></span></a>
+          <a href="#y2029"><span class="yr">2029</span><span class="pl-txt"><span class="pl-name">Choose a Path</span></span></a>
+        </div>
+        <div class="nav-group">
+          <div class="gl">5つの分岐 2029〜</div>
+          <a href="#plan-d" class="sub"><span class="plan-badge-s" style="background:var(--plan-d)">D</span><span class="pl-txt"><span class="pl-name">全速競争</span><span class="pl-en">Race to ASI</span></span><span class="mini-tag likely">現実最有力</span></a>
+          <a href="#plan-c" class="sub"><span class="plan-badge-s" style="background:var(--plan-c)">C</span><span class="pl-txt"><span class="pl-name">米国だけ減速</span><span class="pl-en">Burn the Lead</span></span></a>
+          <a href="#plan-b" class="sub"><span class="plan-badge-s" style="background:var(--plan-b)">B</span><span class="pl-txt"><span class="pl-name">中国を妨害</span><span class="pl-en">Fight China</span></span></a>
+          <a href="#plan-a" class="sub"><span class="plan-badge-s" style="background:var(--plan-a)">A</span><span class="pl-txt"><span class="pl-name">検証付き減速</span><span class="pl-en">Verified Slowdown</span></span><span class="mini-tag rec">推奨案</span></a>
+          <a href="#plan-s" class="sub"><span class="plan-badge-s" style="background:var(--plan-s)">S</span><span class="pl-txt"><span class="pl-name">全面停止</span><span class="pl-en">Shut It All Down</span></span></a>
+        </div>
+        <div class="nav-group">
+          <div class="gl">まとめ</div>
+          <a href="#crux"><span class="yr">§</span><span class="pl-txt"><span class="pl-name">核心とAvsS</span></span></a>
+        </div>
+      </nav>
+    </div>
+  </aside>
+
+  <!-- ============ CONTENT ============ -->
+  <main class="content">
+
+    <!-- INTRO -->
+    <section id="intro" class="intro-hero">
+      <p class="kick">AI Futures Project — Scenario Briefing</p>
+      <h1>放っておけば <em>Plan D</em>。<br>だから <em>Plan A</em> を掲げる。</h1>
+      <p class="lede">これは「2040年はこうなる」という未来予測ではなく、<strong>著者たちが実現させたい政策案 Plan A を、具体的な未来シナリオとしてストレステストする企画</strong>。問いは「誰がレースに勝つか」ではなく、<strong>レースそのものを国際的に管理できるか</strong>。</p>
+
+      <div class="reframe">
+        <h3>⚠️ 最初に効く注意点</h3>
+        <p><span class="big">Plan A が大きく扱われているのは「一番起こりそうだから」ではありません。</span>著者たちの<strong>推奨案（＝表紙案）</strong>だからです。LPにも「予測ではなく、主として推奨である」と明記。むしろ著者は、放置すれば競争継続の <strong style="color:var(--plan-d)">Plan D 寄りになる公算が高い</strong>と見ています。詳しい確率は下の <a href="#y2029" style="color:var(--accent-ink)">2029 の分岐</a> に。</p>
+      </div>
+
+      <p class="subhead">なぜ管理が要るのか ― 5つの危険</p>
+      <div class="danger-grid">
+        <div class="danger"><div class="num">01</div><h4>制御の喪失</h4><p>超知能AIを人間が制御できなくなる。</p></div>
+        <div class="danger"><div class="num">02</div><h4>権力の集中</h4><p>最初の超知能を握った者へ史上最大の集中。</p></div>
+        <div class="danger"><div class="num">03</div><h4>第三次大戦</h4><p>米中の勝者総取り競争が戦争へ。</p></div>
+        <div class="danger"><div class="num">04</div><h4>労働価値の消失</h4><p>収入・意味・交渉力を急速に喪失。</p></div>
+        <div class="danger"><div class="num">05</div><h4>破壊力の拡散</h4><p>バイオ兵器等が小規模組織にも安価に。</p></div>
+      </div>
+    </section>
+
+    <!-- 2027 -->
+    <section id="y2027">
+      <p class="eyebrow"><span class="yb">2027</span> 共通ルート ①</p>
+      <h2>AIが「第二の労働力」になる</h2>
+      <div class="prose">
+        <p>人間の労働人口とは別に、大量のAIエージェントが24時間働き始める。まだ品質は低いが、コンピュータ上の仕事の相当部分をAIが実行可能に。企業が最も自動化したいのは事務ではなく <strong>次のAIを作るAI研究そのもの</strong>。</p>
+        <p>議会は水・電力消費、事故、サイバー攻撃、雇用、権力集中を問題視し「AI Transparency Act」を成立させる。だが情報公開は増えても <strong>米中・企業間の競争構造は変わらない</strong>。</p>
+      </div>
+    </section>
+
+    <!-- 2028 -->
+    <section id="y2028">
+      <p class="eyebrow"><span class="yb">2028</span> 共通ルート ②</p>
+      <h2>AIが大統領選 最大の争点に</h2>
+      <div class="prose">
+        <p>ホワイトカラーの仕事が「AIを管理する仕事」へ急変。企業は職業を丸ごと自動化する訓練を産業化する。同時に、次の問いが政治問題になる。</p>
+        <ul style="color:var(--ink-soft)">
+          <li>数年後に人間の仕事は残るのか</li>
+          <li>AIがAIを作るようになったら、人間は止められるのか</li>
+          <li>最強のAIを誰が所有するのか</li>
+          <li>米国企業が世界中の知的労働を自動化したら、他国はどう反応するか</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- 2029 -->
+    <section id="y2029">
+      <p class="eyebrow"><span class="yb">2029</span> 共通ルート ③ — 分岐点</p>
+      <h2>Choose a Path ― 政策が5つに分かれる</h2>
+      <p class="lede">米国の方針がここで分岐する。「競争を続ける／減速する／中国と国際協定を結ぶ」の3系統、5つのプランへ。（クリックで各プランへ移動）</p>
+
+      <div class="fork">
+        <div class="fh"><span class="yr">2029</span> &nbsp;CHOOSE A PATH</div>
+        <div class="fq">超知能への競争を、どう扱うか？</div>
+        <div class="branches">
+          <div>
+            <div class="branch-l">競争を続ける</div>
+            <div class="bchips">
+              <a class="chip" href="#plan-d" style="--pc:var(--plan-d)"><span class="cb">D</span><span class="cn">全速競争<small>Race to ASI</small></span></a>
+            </div>
+          </div>
+          <div>
+            <div class="branch-l">減速する</div>
+            <div class="bchips">
+              <a class="chip" href="#plan-c" style="--pc:var(--plan-c)"><span class="cb">C</span><span class="cn">米国だけ減速<small>Burn the Lead</small></span></a>
+              <a class="chip" href="#plan-b" style="--pc:var(--plan-b)"><span class="cb">B</span><span class="cn">中国を妨害<small>Fight China</small></span></a>
+            </div>
+          </div>
+          <div>
+            <div class="branch-l">中国と国際協定を結ぶ</div>
+            <div class="bchips">
+              <a class="chip" href="#plan-a" style="--pc:var(--plan-a)"><span class="cb">A</span><span class="cn">検証付き減速<small>Verified Slowdown</small></span></a>
+              <a class="chip" href="#plan-s" style="--pc:var(--plan-s)"><span class="cb">S</span><span class="cn">全面停止<small>Shut It All Down</small></span></a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- probability -->
+      <div class="prob-wrap">
+        <h3>では、実際にはどれが起きそう？</h3>
+        <p class="sub">著者5人の主観確率。<strong>5人全員が Plan A より Plan D（競争継続）の方が起きやすい</strong>と見ている。Plan A はどの著者でも 3〜15%。</p>
+        <table class="prob">
+          <thead><tr><th>著者</th><th style="width:44%">Plan A（推奨案）</th><th style="width:44%">Plan D（全速競争）</th></tr></thead>
+          <tbody>
+            <tr><td class="who">Eli</td>
+              <td><div class="barcell"><span class="bar a" style="width:10%"></span><span class="pv">5%</span></div></td>
+              <td><div class="barcell"><span class="bar d" style="width:50%"></span><span class="pv">25%</span></div></td></tr>
+            <tr><td class="who">Daniel</td>
+              <td><div class="barcell"><span class="bar a" style="width:30%"></span><span class="pv">15%</span></div></td>
+              <td><div class="barcell"><span class="bar d" style="width:60%"></span><span class="pv">30%</span></div></td></tr>
+            <tr><td class="who">Thomas</td>
+              <td><div class="barcell"><span class="bar a" style="width:6%"></span><span class="pv">3%</span></div></td>
+              <td><div class="barcell"><span class="bar d" style="width:100%"></span><span class="pv">50%</span></div></td></tr>
+            <tr><td class="who">Romeo</td>
+              <td><div class="barcell"><span class="bar a" style="width:16%"></span><span class="pv">8%</span></div></td>
+              <td><div class="barcell"><span class="bar d" style="width:60%"></span><span class="pv">30%</span></div></td></tr>
+            <tr><td class="who">Ryan</td>
+              <td><div class="barcell"><span class="bar a" style="width:8%"></span><span class="pv">4%</span></div></td>
+              <td><div class="barcell"><span class="bar d" style="width:56%"></span><span class="pv">28%</span></div></td></tr>
+          </tbody>
+          <tfoot><tr><td colspan="3">※ バーの長さは 50% を最大とした相対表示。B・C や分類外の展開も確率を分け合う。</td></tr></tfoot>
+        </table>
+      </div>
+
+      <p class="subhead">A / B / C / D という命名は、ほぼ「著者の評価順」</p>
+      <div class="naming">
+        <div class="nm"><b>A</b> — 最も望ましい（推奨）</div>
+        <div class="nm"><b>B</b> — 危険だが、うまく実施すればCより良い可能性</div>
+        <div class="nm"><b>C</b> — Dよりはまし</div>
+        <div class="nm"><b>D</b> — 現状路線。著者評価は最悪だが、最も起きやすい</div>
+        <div class="nm"><b>S</b> — 停止案。別系列でAと競合</div>
+      </div>
+    </section>
+
+    <!-- PLAN D -->
+    <section id="plan-d" style="--pc:var(--plan-d)">
+      <div class="plan-head">
+        <div class="plan-mark">D</div>
+        <div class="plan-titles"><div class="en">Race to ASI</div><h2>全速競争</h2></div>
+        <span class="p-tag likely">現実に最有力</span>
+      </div>
+      <p class="plan-what">現状の競争路線をそのまま強化する案。政府は軽い規制だけを行い、企業は「責任あるスケーリング」と称してAI研究の自動化を進める。モデルカードや政府向け説明は出すが、<strong>研究を外部科学者に公開することはない</strong>。</p>
+      <div class="likely-banner">🎯 <b>著者評価では最も起こりやすい対応</b>（主観確率 25〜50%）。「止まる理由がない」ため、放置すればここへ収束する。だからこそ著者は、これを避けるために Plan A を提示している。</div>
+
+      <p class="subhead" style="color:var(--plan-d)">何が起きるか ― 急展開</p>
+      <div class="timeline pc">
+        <div class="tl-item"><div class="tl-year">2030</div><div class="tl-dot"></div><h3>AI研究が完全自動化</h3><p>AIがAI開発を回し始め、改良のループが人間の手を離れる。</p></div>
+        <div class="tl-item"><div class="tl-year">2030 後半</div><div class="tl-dot"></div><h3>知能爆発が開始</h3><p>自己改良の速度が急上昇していく。</p></div>
+        <div class="tl-item"><div class="tl-year">2031 初頭</div><div class="tl-dot"></div><h3>超知能に到達</h3><p>わずか1年ほどで人知を超える水準へ。</p></div>
+      </div>
+
+      <p class="subhead" style="color:var(--plan-d)">著者が「最悪」と見る三重リスク</p>
+      <div class="triple">
+        <div class="trisk"><div class="ti">🤖</div><h4>① AIによる乗っ取り</h4><p>急速な自己改良の途中で、人間が制御を維持できるとは考えにくい。</p></div>
+        <div class="trisk"><div class="ti">👑</div><h4>② AI独裁</h4><p>制御できても、超知能は少数のCEO・大統領に従う。史上最大の権力集中が起きる。</p></div>
+        <div class="trisk"><div class="ti">💥</div><h4>③ 第三次世界大戦</h4><p>経済的・軍事的に永久支配されると考えた他国が、制裁・破壊工作・先制攻撃に動く。</p></div>
+      </div>
+    </section>
+
+    <!-- PLAN C -->
+    <section id="plan-c" style="--pc:var(--plan-c)">
+      <div class="plan-head">
+        <div class="plan-mark">C</div>
+        <div class="plan-titles"><div class="en">Burn the Lead</div><h2>米国だけ減速</h2></div>
+      </div>
+      <p class="plan-what">「米国には中国に対する技術的リードがある。そのリードを安全研究のために消費しよう」という案。政府は強い国内規制を導入し、先頭企業を<strong>AI研究自動化の直前で一時停止</strong>させて、その時間で安全の備えを整えようとする。</p>
+
+      <p class="subhead" style="color:var(--plan-c)">停止中に整えようとするもの</p>
+      <div class="prose"><ul style="color:var(--ink-soft);margin-top:0">
+        <li>アラインメント評価と制御技術</li>
+        <li>AI同士による相互監視</li>
+        <li>政府・議会による企業統治</li>
+        <li>失業者への再分配制度</li>
+      </ul></div>
+
+      <p class="subhead" style="color:var(--plan-c)">だが、こう転ぶ</p>
+      <div class="steps">
+        <div class="step"><div class="sn">STEP 1</div><h4>直前で一時停止</h4><p>先頭企業を研究自動化の一歩手前で止め、安全研究の時間を稼ぐ。</p></div>
+        <div class="step"><div class="sn">STEP 2</div><h4>追いつかれる</h4><p>停止中に他の米国企業と中国が接近。中国は米国の遵守を検証させろと要求するが、米国は監視装置・査察官の国内受け入れを拒否する。</p></div>
+        <div class="step"><div class="sn">STEP 3</div><h4>数カ月で再開</h4><p>「中国に負ける」圧力と企業ロビーに押され、開発を再開してしまう。</p></div>
+      </div>
+
+      <div class="pc-cols">
+        <div class="pc-box pro"><div class="h">Dよりまし</div><ul><li>安全研究の時間を多少は確保する</li></ul></div>
+        <div class="pc-box con"><div class="h">それでも不十分</div><ul><li>数カ月ではアラインメントを解けない</li><li>安全チームが小さく、社内の楽観論から抜けられない</li><li>成功しても米国政府・企業に権力集中</li><li>他国に実権がなく戦争リスクが残る</li></ul></div>
+      </div>
+      <p class="fignote">著者の総括：Cは「安全に進む国際体制」ではなく、<strong>米国が少しだけ慎重に超知能を独占する案</strong>だという批判。</p>
+    </section>
+
+    <!-- PLAN B -->
+    <section id="plan-b" style="--pc:var(--plan-b)">
+      <div class="plan-head">
+        <div class="plan-mark">B</div>
+        <div class="plan-titles"><div class="en">Fight China</div><h2>中国を妨害</h2></div>
+      </div>
+      <p class="plan-what">米国主導のAI連合と巨大国家プロジェクトを作る案。同盟国には最先端AIへのアクセスを与えるが、中国・ロシアには検証権を与えない。国内では主要AI企業の人材・計算資源・アルゴリズムを「<strong>The Project</strong>」に統合し、大統領の統制下に置く。中国が競争を続けるなら、開発を妨害する。</p>
+
+      <p class="subhead" style="color:var(--plan-b)">妨害は段階的に激化する</p>
+      <div class="ladder">
+        <div class="rung"><span class="lv">1</span><span class="lt">サイバー諜報</span><span class="track"><i style="width:22%"></i></span></div>
+        <div class="rung"><span class="lv">2</span><span class="lt">AI開発へのサイバー攻撃</span><span class="track"><i style="width:36%"></i></span></div>
+        <div class="rung"><span class="lv">3</span><span class="lt">半導体供給網への攻撃</span><span class="track"><i style="width:52%"></i></span></div>
+        <div class="rung"><span class="lv">4</span><span class="lt">データセンターの電力遮断</span><span class="track"><i style="width:68%"></i></span></div>
+        <div class="rung"><span class="lv">5</span><span class="lt">製造装置の破壊工作</span><span class="track"><i style="width:84%"></i></span></div>
+        <div class="rung"><span class="lv">6</span><span class="lt">台湾封鎖・データセンターへのミサイル攻撃の準備</span><span class="track"><i style="width:100%"></i></span></div>
+      </div>
+
+      <p class="subhead" style="color:var(--plan-b)">最後に大統領が迫られる二択</p>
+      <div class="dilemma">
+        <div class="dil handoff"><div class="dh">HANDOFF</div><p>安全性に確信がなくても、AIに研究と軍事を任せて超知能へ進む。</p></div>
+        <div class="dil war"><div class="dh">WAR</div><p>中国の追いつきを阻止するため、本格的な軍事攻撃に踏み切る。</p></div>
+      </div>
+
+      <div class="pc-cols">
+        <div class="pc-box pro"><div class="h">Cより長い時間</div><ul><li>安全研究の期間を稼げる可能性がある</li></ul></div>
+        <div class="pc-box con"><div class="h">弱点</div><ul><li>対中勝利が目的化し、実際には減速しない</li><li>安全保障上の秘密主義で外部研究者を排除</li><li>大統領にAI権力が集中する</li><li>妨害が報復を招き、戦争に近づく</li></ul></div>
+      </div>
+      <p class="fignote">著者の見立て：Bが失敗すると「<strong>Plan D に対中攻撃と国内権力集中を追加したもの</strong>」になる。</p>
+    </section>
+
+    <!-- PLAN A (rich) -->
+    <section id="plan-a">
+      <div class="plan-head" style="--pc:var(--plan-a)">
+        <div class="plan-mark">A</div>
+        <div class="plan-titles"><div class="en">Verified Slowdown</div><h2>検証付き減速</h2></div>
+        <span class="p-tag rec">★ 著者の推奨案</span>
+      </div>
+      <p class="plan-what">停止でも競争でもなく、<strong>国際的に検証しながら、人間が制御可能な範囲でAI能力を段階的に上げる</strong>。米中は互いを信用しないので、信頼の代わりに <strong>検証</strong> を使う。これが著者の実現させたい世界（＝表紙案。前述の通り発生確率は低いと自認）。</p>
+
+      <p class="subhead">2030年に確立する4原則</p>
+      <div class="principles">
+        <div class="principle"><div class="pn">1</div><div><h4>時間を買う</h4><p>安全だと証明できるまで、その都度停止。「期限が来たら進む」ではなく「立証したら進む」と立証責任を逆転。</p></div></div>
+        <div class="principle"><div class="pn">2</div><div><h4>研究の全面透明化</h4><p>アルゴリズム・訓練法・失敗事例まで公開。ただし重みの無制限公開は禁止し、管理環境でのオープンアクセスを提供。</p></div></div>
+        <div class="principle"><div class="pn">3</div><div><h4>能力を広く分散</h4><p>一社一国の独占ではなく、多数の企業・国・相互監視するAI系統を並立。安全研究者を数百→数万人へ。</p></div></div>
+        <div class="principle"><div class="pn">4</div><div><h4>可逆性を維持</h4><p>進歩をアルゴリズム革新でなく計算資源の増加で行う。アルゴリズムは消せないが、データセンターは止め・壊せる。</p></div></div>
+      </div>
+
+      <p class="subhead">原則4の極端形 — Mutually Assured Compute Destruction</p>
+      <div class="figbox">
+        <svg viewBox="0 0 820 300" role="img" aria-label="相互確証計算破壊">
+          <rect x="40" y="120" width="120" height="60" rx="12" fill="var(--surface-2)" stroke="var(--plan-s)" stroke-width="2"/>
+          <text x="100" y="147" text-anchor="middle" font-family="var(--font-mono)" font-size="15" font-weight="800" fill="var(--plan-s)">米 国</text>
+          <text x="100" y="166" text-anchor="middle" font-size="11" fill="var(--ink-faint)">USA</text>
+          <rect x="660" y="120" width="120" height="60" rx="12" fill="var(--surface-2)" stroke="var(--plan-b)" stroke-width="2"/>
+          <text x="720" y="147" text-anchor="middle" font-family="var(--font-mono)" font-size="15" font-weight="800" fill="var(--plan-b)">中 国</text>
+          <text x="720" y="166" text-anchor="middle" font-size="11" fill="var(--ink-faint)">China</text>
+          <rect x="470" y="40" width="150" height="56" rx="10" fill="none" stroke="var(--plan-s)" stroke-width="2" stroke-dasharray="6 5"/>
+          <text x="545" y="64" text-anchor="middle" font-size="12.5" font-weight="700" fill="var(--ink)">米国の計算資源</text>
+          <text x="545" y="82" text-anchor="middle" font-family="var(--font-mono)" font-size="11" fill="var(--ink-soft)">@ モンゴル 等</text>
+          <rect x="200" y="204" width="150" height="56" rx="10" fill="none" stroke="var(--plan-b)" stroke-width="2" stroke-dasharray="6 5"/>
+          <text x="275" y="228" text-anchor="middle" font-size="12.5" font-weight="700" fill="var(--ink)">中国の計算資源</text>
+          <text x="275" y="246" text-anchor="middle" font-family="var(--font-mono)" font-size="11" fill="var(--ink-soft)">@ カナダ 等</text>
+          <path d="M160 140 C 320 120, 380 90, 470 70" fill="none" stroke="var(--plan-s)" stroke-width="1.6" opacity=".55"/>
+          <path d="M660 160 C 500 180, 430 210, 350 228" fill="none" stroke="var(--plan-b)" stroke-width="1.6" opacity=".55"/>
+          <text x="545" y="118" text-anchor="middle" font-family="var(--font-mono)" font-size="11" font-weight="700" fill="var(--risk)">⚡ 合意崩壊時＝自ら破壊</text>
+          <text x="275" y="192" text-anchor="middle" font-family="var(--font-mono)" font-size="11" font-weight="700" fill="var(--risk)">⚡ 合意崩壊時＝自ら破壊</text>
+        </svg>
+      </div>
+      <p class="fignote">核の相互確証破壊を計算資源に応用。互いの新規資源を第三国に置き、合意が崩れたら相手に奪われる前に自ら破壊する。<strong>どちらも一方的に温存できない配置</strong>で抜け駆けの動機を消す。</p>
+
+      <p class="subhead">Plan A に入った後の年表 2029 → 2040</p>
+      <div class="timeline">
+        <div class="tl-item"><div class="tl-year">2029</div><div class="tl-dot"></div><h3>米中交渉 ― 検証で代替</h3><p>計算資源・チップ・工場を申告。衛星・電力・税関・査察で隠れた資源を探し、未把握を世界の約1%以下に。監視が整うまで新規大規模訓練を停止。</p></div>
+        <div class="tl-item"><div class="tl-year">2030</div><div class="tl-dot"></div><h3>4原則の確立</h3><p>時間を買う／透明化／分散／可逆性を制度化。（シナリオ上の中央値の年。断言ではない）</p></div>
+        <div class="tl-item"><div class="tl-year">2031</div><div class="tl-dot"></div><h3>Safety Case 体制</h3><p>研究自動化を許せば約10倍加速できる能力が登場するが禁止。危険領域への投入には公開の Safety Case が必須（Alignment＋Control の二層防御）。</p></div>
+        <div class="tl-item"><div class="tl-year">2032</div><div class="tl-dot"></div><h3>制御された爆発的成長</h3><p>数千万のAIが人間の何十倍もの速度で稼働。知能爆発に続き「産業爆発」へ。計算資源とロボット製造の許可制で速度抑制。</p></div>
+        <div class="tl-item"><div class="tl-year">2033</div><div class="tl-dot"></div><h3>Citizen's Dividend（市民配当）</h3><p>AI・ロボット許可料を全国民へ配当。失業給付ではなく、経済的に不要になっても所得と政治的交渉力を失わない仕組み。</p></div>
+        <div class="tl-item"><div class="tl-year">2034</div><div class="tl-dot"></div><h3>巨大計算資源と相互破壊体制</h3><p>計算資源が急増。人間の監督・生産上限・相互破壊配置で、崩壊時の一方独占を防ぐ。</p></div>
+        <div class="tl-item"><div class="tl-year">2035</div><div class="tl-dot"></div><h3>トップ人間専門家レベルで停止</h3><p>AIがほぼ全分野で最高の人間専門家以上に。これを超えると人間が評価できないため能力向上を再停止。以後 約5年をアラインメント研究へ。</p></div>
+        <div class="tl-item"><div class="tl-year">2036–39</div><div class="tl-dot"></div><h3>アラインメントの進展</h3><p>AI内部表現を人間が読める形に変換する Neuralese decoding が進歩。表面的服従か長期価値観の安定かを高信頼で判定。</p></div>
+        <div class="tl-item"><div class="tl-year">2040</div><div class="tl-dot"></div><h3>Passing the Torch</h3><p>全面透明・複数企業/国が最先端・価値観公開・権力非集中の条件下で、経済〜軍事を段階的にAIへ委譲。不可逆点を、賭けでなく長年の公開検証を経た判断として越える。</p></div>
+      </div>
+
+      <p class="subhead">市民配当と労働の置き換え（シナリオ上の数字）</p>
+      <div class="stat-row">
+        <div class="stat"><div class="k">2032 / 成人1人・年</div><div class="v">$45,000</div><div class="d">市民配当（初期）</div></div>
+        <div class="stat"><div class="k">2035 / 成人1人・年</div><div class="v">≈ $1M</div><div class="d">約22倍に拡大</div></div>
+        <div class="stat"><div class="k">2035 / 経済価値ベース</div><div class="v">≈ 85%</div><div class="d">労働をAI・ロボットが担当</div></div>
+      </div>
+      <div class="callout warn">
+        <h4><span class="ic">未再確認</span>この3つの数字について</h4>
+        <p>市民配当 $45,000→約$100万、労働 約85% は、該当ページが長文で取得時に途中で切れたため <strong>元ページで独立に再確認できていない</strong> 数字です。他は原文と照合済みですが、この3点だけは「未再確認」として扱ってください。</p>
+      </div>
+    </section>
+
+    <!-- PLAN S -->
+    <section id="plan-s" style="--pc:var(--plan-s)">
+      <div class="plan-head">
+        <div class="plan-mark">S</div>
+        <div class="plan-titles"><div class="en">Shut It All Down</div><h2>全面停止</h2></div>
+        <span class="p-tag alt">Aと競合する別系列</span>
+      </div>
+      <p class="plan-what">最先端AIの能力向上を世界的に停止する案。米中などが既存AIチップを登録・追跡し、大規模な新規訓練と、より優れたアルゴリズムを作る研究を禁止、相互にデータセンターを監査する。<strong>AI能力そのものは凍結されるが、既存AIを組み込んだ製品やワークフローは改善され続ける</strong>ため、社会は依然として大きく変化する。</p>
+
+      <p class="subhead" style="color:var(--plan-s)">凍結するもの／続けるもの</p>
+      <div class="ab">
+        <div class="col no"><h4>🚫 禁止（凍結）</h4><ul>
+          <li>大規模な新規訓練</li>
+          <li>より優れたAIアルゴリズムの研究</li>
+        </ul></div>
+        <div class="col ok"><h4>✓ 継続（許可）</h4><ul>
+          <li>既存モデルの推論利用</li>
+          <li>AI製品・ワークフローの改良</li>
+          <li>AIでない「道具型ソフト」の改良</li>
+        </ul></div>
+      </div>
+      <p class="fignote">秘密プロジェクトは残るが、数千GPU程度の小規模計算資源では進歩が遅く、優秀な研究者も集めにくい。著者は非合法なAI研究の速度を<strong>停止前の10分の1以下</strong>にできる可能性があるとする。</p>
+
+      <div class="pc-cols">
+        <div class="pc-box pro"><div class="h">短期的にはかなり有力</div><ul><li>制度がAより単純</li><li>即時的なAI乗っ取りリスクが小さい</li><li>規制当局が複雑な能力境界を判断しなくてよい</li><li>数年かけて、より良い計画を作れる</li></ul></div>
+        <div class="pc-box con"><div class="h">残る変化</div><ul><li>既存AIの製品化は進み、社会は変わり続ける</li><li>秘密プロジェクトを完全にはゼロにできない</li></ul></div>
+      </div>
+
+      <div class="callout warn">
+        <h4><span class="ic">最大の弱点</span>協定は永遠には続かない</h4>
+        <p>崩れた時点で、世界には大量の計算資源が蓄積し、安全研究も一緒に禁止されていた。戦争や秘密国家計画の中で再開され、その再開後の知能爆発が<strong>今より速くなる</strong>恐れがある。だから「安定している今のうちに安全なAIを作るべき」と考えるならA、「協定が長く安定し、停止中により良い再開計画を作れる」と考えるならSが優位 ― というのが A と S の分かれ目。</p>
+      </div>
+    </section>
+
+    <!-- CRUX -->
+    <section id="crux">
+      <div class="crux">
+        <p class="eyebrow">まとめ ― 核心</p>
+        <h2>「減速するか」だけではない</h2>
+        <p>核心は、<strong style="color:#fff">単独・対中妨害・国際協調のどれで減速するか</strong>、そして <strong style="color:#fff">協調後に進むか止めるか</strong>。A/B/C/D は評価順の命名で、放置すれば D 寄り。だからこそ低確率でも A を政策目標として掲げている ― という文書。</p>
+        <div class="vs">
+          <div class="a"><div class="lbl">A が有利なら</div><p>「協定はいずれ崩れる。安定している今のうちに、制御可能なAIへスケーリングして安全な超知能を完成させるべき」</p></div>
+          <div class="s"><div class="lbl">S が有利なら</div><p>「協定が長く安定し、停止中にもっと良い再開計画を作れる。より長い減速と誤りの余裕が取れる」</p></div>
+        </div>
+      </div>
+      <footer>
+        <p class="src">SOURCE — ai-2040.com（AI Futures Project）／ Plan A ほか supplements・comparing-possible-plans を照合。確率は著者5人の主観値。</p>
+        <p>数字（市民配当・労働85%）はシナリオ上の想定値で、上記「未再確認」注記を参照。詳細は <a href="https://ai-2040.com/">ai-2040.com</a>。</p>
+      </footer>
+    </section>
+
+  </main>
+</div>
+</div>
+
+<script>
+  (function () {
+    var links = Array.prototype.slice.call(document.querySelectorAll('.nav a[href^="#"]'));
+    var map = {};
+    links.forEach(function (a) { map[a.getAttribute('href').slice(1)] = a; });
+    var sections = Array.prototype.slice.call(document.querySelectorAll('section[id]'));
+    if (!('IntersectionObserver' in window)) return;
+    var obs = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) {
+          links.forEach(function (l) { l.classList.remove('active'); });
+          if (map[e.target.id]) {
+            map[e.target.id].classList.add('active');
+            // keep active item in view within the sidebar on desktop
+            if (window.innerWidth > 860) {
+              map[e.target.id].scrollIntoView({ block: 'nearest' });
+            }
+          }
+        }
+      });
+    }, { rootMargin: '-30% 0px -55% 0px', threshold: 0 });
+    sections.forEach(function (s) { obs.observe(s); });
+  })();
+</script>
+</body>
+</html>
